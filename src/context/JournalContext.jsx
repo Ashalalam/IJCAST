@@ -13,6 +13,33 @@ import {
 
 const JournalContext = createContext(null);
 
+// Supabase may return JSON fields as strings — ensure arrays are always arrays
+const normalizeResearchAreas = (areas) =>
+  (areas || []).map((area) => ({
+    ...area,
+    subcategories: Array.isArray(area.subcategories)
+      ? area.subcategories
+      : typeof area.subcategories === 'string'
+      ? (() => { try { return JSON.parse(area.subcategories); } catch { return []; } })()
+      : [],
+  }));
+
+const parseJsonField = (field) => {
+  if (Array.isArray(field)) return field;
+  if (typeof field === 'string') {
+    try { return JSON.parse(field); } catch { return []; }
+  }
+  return [];
+};
+
+const normalizeArticles = (arts) =>
+  (arts || []).map((art) => ({
+    ...art,
+    authors: parseJsonField(art.authors),
+    keywords: parseJsonField(art.keywords),
+    orcids: parseJsonField(art.orcids),
+  }));
+
 export const JournalProvider = ({ children }) => {
   // State initialization with localStorage fallbacks
   const [settings, setSettings] = useState(() => getLocalStore(STORAGE_KEYS.SETTINGS, initialJournalSettings));
@@ -68,7 +95,7 @@ export const JournalProvider = ({ children }) => {
 
         const { data: arts } = await supabase.from('articles').select('*').order('sort_order', { ascending: true });
         if (arts && arts.length > 0) {
-          setArticles(arts);
+          setArticles(normalizeArticles(arts));
         } else {
           setArticles(initialArticles);
           await supabase.from('articles').insert(initialArticles).catch(() => {});
@@ -84,7 +111,7 @@ export const JournalProvider = ({ children }) => {
 
         const { data: ras } = await supabase.from('research_areas').select('*').order('sort_order', { ascending: true });
         if (ras && ras.length > 0) {
-          setResearchAreas(ras);
+          setResearchAreas(normalizeResearchAreas(ras));
         } else {
           setResearchAreas(initialResearchAreas);
           await supabase.from('research_areas').insert(initialResearchAreas).catch(() => {});
@@ -296,11 +323,19 @@ export const JournalProvider = ({ children }) => {
 
   // Research Areas
   const saveResearchArea = async (raData) => {
+    const normalized = {
+      ...raData,
+      subcategories: Array.isArray(raData.subcategories)
+        ? raData.subcategories
+        : typeof raData.subcategories === 'string'
+        ? (() => { try { return JSON.parse(raData.subcategories); } catch { return []; } })()
+        : [],
+    };
     let updated;
-    if (raData.id) {
-      updated = researchAreas.map(r => r.id === raData.id ? { ...r, ...raData } : r);
+    if (normalized.id) {
+      updated = researchAreas.map(r => r.id === normalized.id ? { ...r, ...normalized } : r);
     } else {
-      const newRa = { ...raData, id: `ra-${Date.now()}`, sort_order: researchAreas.length + 1 };
+      const newRa = { ...normalized, id: `ra-${Date.now()}`, sort_order: researchAreas.length + 1 };
       updated = [...researchAreas, newRa];
     }
     setResearchAreas(updated);

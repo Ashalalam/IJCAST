@@ -59,13 +59,13 @@ export const ResearchAreas = () => {
                 </div>
                 <div>
                   <h3 className="text-lg font-bold text-slate-900 font-serif leading-snug">{area.category}</h3>
-                  <span className="text-[11px] text-slate-500 font-medium">{area.subcategories.length} Specialized Disciplines</span>
+                  <span className="text-[11px] text-slate-500 font-medium">{(Array.isArray(area.subcategories) ? area.subcategories : []).length} Specialized Disciplines</span>
                 </div>
               </div>
 
               {/* Subcategories Pill Badges */}
               <div className="flex flex-wrap gap-2">
-                {area.subcategories.map((sub, i) => (
+                {(Array.isArray(area.subcategories) ? area.subcategories : []).map((sub, i) => (
                   <span
                     key={i}
                     className="px-3 py-1 bg-slate-50 hover:bg-slate-100 border border-slate-200/80 text-slate-700 text-xs font-medium rounded-full transition-colors"

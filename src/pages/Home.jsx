@@ -210,12 +210,12 @@ export const Home = () => {
                   <h3 className="font-bold text-sm text-slate-900 font-serif line-clamp-1">{area.category}</h3>
                 </div>
                 <div className="flex flex-wrap gap-1">
-                  {area.subcategories.slice(0, 4).map((sub, i) => (
+                  {(Array.isArray(area.subcategories) ? area.subcategories : []).slice(0, 4).map((sub, i) => (
                     <span key={i} className="px-2 py-0.5 bg-slate-100 text-slate-600 text-[10px] rounded font-medium">
                       {sub}
                     </span>
                   ))}
-                  {area.subcategories.length > 4 && (
+                  {(Array.isArray(area.subcategories) ? area.subcategories : []).length > 4 && (
                     <span className="px-2 py-0.5 bg-amber-50 text-amber-700 text-[10px] rounded font-semibold">
                       +{area.subcategories.length - 4} more
                     </span>

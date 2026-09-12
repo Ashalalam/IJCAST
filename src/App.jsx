@@ -28,6 +28,8 @@ import { Privacy } from './pages/Privacy';
 import { AdminLogin } from './pages/admin/AdminLogin';
 import { AdminDashboard } from './pages/admin/AdminDashboard';
 import { NotFound } from './pages/NotFound';
+import { Theses } from './pages/Theses';
+import { ScrollToTop } from './components/common/ScrollToTop';
 
 // Layout wrapper for Public pages
 const PublicLayout = ({ children }) => (
@@ -48,6 +50,7 @@ export default function App() {
   return (
     <JournalProvider>
       <Router>
+        <ScrollToTop />
         <Routes>
           {/* Admin Routes */}
           <Route path="/admin/login" element={<AdminLogin />} />
@@ -69,6 +72,7 @@ export default function App() {
           <Route path="/apc" element={<PublicLayout><APC /></PublicLayout>} />
           <Route path="/copyright" element={<PublicLayout><Copyright /></PublicLayout>} />
           <Route path="/privacy" element={<PublicLayout><Privacy /></PublicLayout>} />
+          <Route path="/theses" element={<PublicLayout><Theses /></PublicLayout>} />
 
           {/* 404 catch-all */}
           <Route path="*" element={<NotFound />} />

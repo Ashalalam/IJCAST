@@ -8,7 +8,8 @@ import {
   initialArticles,
   initialEditorialMembers,
   initialPageContent,
-  initialMedia
+  initialMedia,
+  initialTheses
 } from '../lib/mockData';
 
 const JournalContext = createContext(null);
@@ -51,6 +52,7 @@ export const JournalProvider = ({ children }) => {
   const [pageContents, setPageContents] = useState(() => getLocalStore(STORAGE_KEYS.PAGE_CONTENT, initialPageContent));
   const [mediaItems, setMediaItems] = useState(() => getLocalStore(STORAGE_KEYS.MEDIA, initialMedia));
   const [adminSession, setAdminSession] = useState(() => getLocalStore(STORAGE_KEYS.ADMIN_SESSION, null));
+  const [theses, setTheses] = useState(() => getLocalStore(STORAGE_KEYS.THESES, initialTheses));
 
   // Global Modal States
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -67,6 +69,7 @@ export const JournalProvider = ({ children }) => {
   useEffect(() => { setLocalStore(STORAGE_KEYS.PAGE_CONTENT, pageContents); }, [pageContents]);
   useEffect(() => { setLocalStore(STORAGE_KEYS.MEDIA, mediaItems); }, [mediaItems]);
   useEffect(() => { setLocalStore(STORAGE_KEYS.ADMIN_SESSION, adminSession); }, [adminSession]);
+  useEffect(() => { setLocalStore(STORAGE_KEYS.THESES, theses); }, [theses]);
 
   // Load from Supabase if configured
   useEffect(() => {
@@ -131,6 +134,14 @@ export const JournalProvider = ({ children }) => {
         } else {
           setMediaItems(initialMedia);
           await supabase.from('media').insert(initialMedia).catch(() => {});
+        }
+
+        const { data: ths } = await supabase.from('theses').select('*').order('created_at', { ascending: false });
+        if (ths && ths.length > 0) {
+          setTheses(ths.map(t => ({ ...t, guide_names: parseJsonField(t.guide_names), keywords: parseJsonField(t.keywords) })));
+        } else {
+          setTheses(initialTheses);
+          await supabase.from('theses').insert(initialTheses).catch(() => {});
         }
       } catch (err) {
         console.warn('Supabase fetch error, maintaining local state:', err);
@@ -399,6 +410,46 @@ export const JournalProvider = ({ children }) => {
     }
   };
 
+  // Theses
+  const saveThesis = async (thesisData) => {
+    const normalized = {
+      ...thesisData,
+      guide_names: Array.isArray(thesisData.guide_names)
+        ? thesisData.guide_names
+        : thesisData.guide_names.split(',').map(g => g.trim()).filter(Boolean),
+      keywords: Array.isArray(thesisData.keywords)
+        ? thesisData.keywords
+        : thesisData.keywords.split(',').map(k => k.trim()).filter(Boolean),
+    };
+    let updated;
+    if (normalized.id) {
+      updated = theses.map(t => t.id === normalized.id ? { ...t, ...normalized } : t);
+    } else {
+      const newThesis = { ...normalized, id: `thesis-${Date.now()}`, created_at: new Date().toISOString() };
+      updated = [newThesis, ...theses];
+    }
+    setTheses(updated);
+    if (isSupabaseConfigured && supabase) {
+      await supabase.from('theses').upsert(normalized);
+    }
+  };
+
+  const deleteThesis = async (id) => {
+    setTheses(theses.filter(t => t.id !== id));
+    if (isSupabaseConfigured && supabase) {
+      await supabase.from('theses').delete().eq('id', id);
+    }
+  };
+
+  const toggleThesisPublish = async (id) => {
+    const updated = theses.map(t => t.id === id ? { ...t, is_published: !t.is_published } : t);
+    setTheses(updated);
+    const target = updated.find(t => t.id === id);
+    if (isSupabaseConfigured && supabase && target) {
+      await supabase.from('theses').update({ is_published: target.is_published }).eq('id', id);
+    }
+  };
+
   const value = {
     settings,
     updateSettings,
@@ -428,6 +479,10 @@ export const JournalProvider = ({ children }) => {
     mediaItems,
     addMediaItem,
     deleteMediaItem,
+    theses,
+    saveThesis,
+    deleteThesis,
+    toggleThesisPublish,
     adminSession,
     loginAdmin,
     logoutAdmin,

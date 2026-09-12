@@ -361,3 +361,39 @@ export const initialMedia = [
     uploaded_at: '2026-01-01T00:00:00Z'
   }
 ];
+
+// ========================================================
+// THESIS DATA
+// ========================================================
+export const initialTheses = [
+  {
+    id: 'thesis-1',
+    degree_type: 'PhD',
+    title: 'Machine Learning Approaches for Predictive Analytics in Supply Chain Management',
+    scholar_name: 'Mr. Arvind Sharma',
+    guide_names: ['Prof. (Dr.) R. K. Mehra', 'Dr. Sunita Patel'],
+    university: 'Jawaharlal Nehru University, New Delhi',
+    stream: 'Computer Science & Technology',
+    year: 2025,
+    abstract: 'This thesis investigates the application of supervised and unsupervised machine learning algorithms to forecast supply chain disruptions and optimize logistics networks across Indian manufacturing sectors.',
+    keywords: ['Machine Learning', 'Supply Chain', 'Predictive Analytics', 'Logistics'],
+    pdf_url: '',
+    is_published: true,
+    created_at: '2025-06-01T00:00:00Z'
+  },
+  {
+    id: 'thesis-2',
+    degree_type: 'M.Tech',
+    title: 'Design and Simulation of Energy-Efficient Microgrid Systems for Rural Electrification',
+    scholar_name: 'Ms. Priya Nair',
+    guide_names: ['Dr. Vikram Singh'],
+    university: 'IIT Bombay, Mumbai',
+    stream: 'Engineering',
+    year: 2024,
+    abstract: 'This thesis presents a simulation-based study of hybrid photovoltaic-battery microgrid systems designed for off-grid rural communities, achieving significant reduction in energy deficit and carbon footprint.',
+    keywords: ['Microgrid', 'Renewable Energy', 'Rural Electrification', 'Simulation'],
+    pdf_url: '',
+    is_published: true,
+    created_at: '2024-12-01T00:00:00Z'
+  }
+];

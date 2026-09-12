@@ -176,7 +176,22 @@ export const JournalProvider = ({ children }) => {
     const updated = { ...settings, ...newSettings, updated_at: new Date().toISOString() };
     setSettings(updated);
     if (isSupabaseConfigured && supabase) {
-      await supabase.from('journal_settings').upsert(updated);
+      // Use the real UUID from the fetched row if available, otherwise upsert
+      if (updated.id && updated.id !== 'setting-1') {
+        await supabase.from('journal_settings').update(updated).eq('id', updated.id);
+      } else {
+        // No real UUID yet — fetch it first, then update
+        const { data: existing } = await supabase.from('journal_settings').select('id').single();
+        if (existing?.id) {
+          const withRealId = { ...updated, id: existing.id };
+          setSettings(withRealId);
+          await supabase.from('journal_settings').update(withRealId).eq('id', existing.id);
+        } else {
+          // Table is empty — insert for the first time
+          const { data: inserted } = await supabase.from('journal_settings').insert(updated).select().single();
+          if (inserted) setSettings(inserted);
+        }
+      }
     }
   };
 

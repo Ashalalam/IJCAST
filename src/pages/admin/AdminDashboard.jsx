@@ -12,11 +12,12 @@ import { PageContentEditor } from '../../components/admin/PageContentEditor';
 import { MediaManager } from '../../components/admin/MediaManager';
 import { SettingsManager } from '../../components/admin/SettingsManager';
 
-import { FolderTree, BookMarked, FileText, Users, Plus, ArrowRight, Eye, ShieldCheck } from 'lucide-react';
+import { FolderTree, BookMarked, FileText, Users, Plus, ArrowRight, Eye, ShieldCheck, Menu } from 'lucide-react';
 
 export const AdminDashboard = () => {
   const { adminSession, volumes, issues, articles, editorialMembers } = useJournal();
   const [activeTab, setActiveTab] = useState('dashboard');
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // Protect Admin route
   if (!adminSession) {
@@ -26,13 +27,47 @@ export const AdminDashboard = () => {
   const publishedArticles = articles.filter(a => a.is_published);
   const latestArticlesList = articles.slice(0, 5);
 
+  // Close sidebar when a tab is selected on mobile
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+    setSidebarOpen(false);
+  };
+
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex">
+    <div className="min-h-screen bg-slate-950 text-slate-100 flex relative">
+      {/* Mobile overlay backdrop */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black/60 z-20 lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
       {/* Sidebar Navigation */}
-      <AdminSidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+      <AdminSidebar
+        activeTab={activeTab}
+        setActiveTab={handleTabChange}
+        sidebarOpen={sidebarOpen}
+        setSidebarOpen={setSidebarOpen}
+      />
 
       {/* Main Admin Workspace Area */}
-      <main className="flex-1 p-6 sm:p-10 overflow-y-auto max-h-screen custom-scrollbar">
+      <main className="flex-1 overflow-y-auto max-h-screen custom-scrollbar">
+        {/* Mobile Top Bar with hamburger */}
+        <div className="lg:hidden sticky top-0 z-10 flex items-center justify-between bg-slate-950 border-b border-slate-800 px-4 py-3">
+          <div>
+            <span className="text-xs uppercase font-bold text-amber-500 tracking-wider">Admin Panel</span>
+          </div>
+          <button
+            onClick={() => setSidebarOpen(true)}
+            className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 transition-colors"
+            aria-label="Open menu"
+          >
+            <Menu className="w-5 h-5" />
+          </button>
+        </div>
+
+        <div className="p-4 sm:p-6 lg:p-10">
         {/* Tab 1: Dashboard Overview */}
         {activeTab === 'dashboard' && (
           <div className="space-y-8">
@@ -43,7 +78,7 @@ export const AdminDashboard = () => {
               </div>
               <div className="flex items-center space-x-2">
                 <button
-                  onClick={() => setActiveTab('articles')}
+                  onClick={() => handleTabChange('articles')}
                   className="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs rounded-xl shadow transition-colors flex items-center space-x-1.5"
                 >
                   <Plus className="w-4 h-4" />
@@ -53,8 +88,8 @@ export const AdminDashboard = () => {
             </div>
 
             {/* Metrics Overview Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              <div className="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-2">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+              <div className="bg-slate-900 border border-slate-800 p-5 rounded-2xl space-y-2">
                 <div className="flex items-center justify-between text-slate-400">
                   <span className="text-xs font-semibold uppercase">Total Volumes</span>
                   <FolderTree className="w-5 h-5 text-amber-500" />
@@ -63,7 +98,7 @@ export const AdminDashboard = () => {
                 <p className="text-[11px] text-slate-500">{volumes.filter(v => v.status === 'Active').length} Active Volumes</p>
               </div>
 
-              <div className="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-2">
+              <div className="bg-slate-900 border border-slate-800 p-5 rounded-2xl space-y-2">
                 <div className="flex items-center justify-between text-slate-400">
                   <span className="text-xs font-semibold uppercase">Total Issues</span>
                   <BookMarked className="w-5 h-5 text-amber-500" />
@@ -72,16 +107,16 @@ export const AdminDashboard = () => {
                 <p className="text-[11px] text-slate-500">Across all years</p>
               </div>
 
-              <div className="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-2">
+              <div className="bg-slate-900 border border-slate-800 p-5 rounded-2xl space-y-2">
                 <div className="flex items-center justify-between text-slate-400">
                   <span className="text-xs font-semibold uppercase">Total Articles</span>
                   <FileText className="w-5 h-5 text-amber-500" />
                 </div>
                 <p className="text-3xl font-bold text-white font-serif">{articles.length}</p>
-                <p className="text-[11px] text-emerald-400 font-medium">{publishedArticles.length} Published Articles</p>
+                <p className="text-[11px] text-emerald-400 font-medium">{publishedArticles.length} Published</p>
               </div>
 
-              <div className="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-2">
+              <div className="bg-slate-900 border border-slate-800 p-5 rounded-2xl space-y-2">
                 <div className="flex items-center justify-between text-slate-400">
                   <span className="text-xs font-semibold uppercase">Board Members</span>
                   <Users className="w-5 h-5 text-amber-500" />
@@ -96,7 +131,7 @@ export const AdminDashboard = () => {
               <div className="flex items-center justify-between border-b border-slate-800 pb-3">
                 <h3 className="text-base font-bold font-serif text-white">Latest Articles Widget</h3>
                 <button
-                  onClick={() => setActiveTab('articles')}
+                  onClick={() => handleTabChange('articles')}
                   className="text-xs font-bold text-amber-400 hover:underline flex items-center space-x-1"
                 >
                   <span>Manage Articles</span>
@@ -133,7 +168,7 @@ export const AdminDashboard = () => {
             {/* Quick Actions Panel */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
               <button
-                onClick={() => setActiveTab('volumes')}
+                onClick={() => handleTabChange('volumes')}
                 className="p-5 bg-slate-900 border border-slate-800 hover:border-amber-500/50 rounded-2xl text-left space-y-2 transition-all group"
               >
                 <FolderTree className="w-6 h-6 text-amber-400 group-hover:scale-110 transition-transform" />
@@ -142,7 +177,7 @@ export const AdminDashboard = () => {
               </button>
 
               <button
-                onClick={() => setActiveTab('editorial')}
+                onClick={() => handleTabChange('editorial')}
                 className="p-5 bg-slate-900 border border-slate-800 hover:border-amber-500/50 rounded-2xl text-left space-y-2 transition-all group"
               >
                 <Users className="w-6 h-6 text-amber-400 group-hover:scale-110 transition-transform" />
@@ -151,7 +186,7 @@ export const AdminDashboard = () => {
               </button>
 
               <button
-                onClick={() => setActiveTab('settings')}
+                onClick={() => handleTabChange('settings')}
                 className="p-5 bg-slate-900 border border-slate-800 hover:border-amber-500/50 rounded-2xl text-left space-y-2 transition-all group"
               >
                 <ShieldCheck className="w-6 h-6 text-amber-400 group-hover:scale-110 transition-transform" />
@@ -185,6 +220,7 @@ export const AdminDashboard = () => {
 
         {/* Tab 9: Settings */}
         {activeTab === 'settings' && <SettingsManager />}
+        </div>
       </main>
     </div>
   );

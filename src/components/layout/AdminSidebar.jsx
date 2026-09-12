@@ -12,10 +12,11 @@ import {
   Settings,
   LogOut,
   Globe,
-  Lock
+  Lock,
+  X
 } from 'lucide-react';
 
-export const AdminSidebar = ({ activeTab, setActiveTab }) => {
+export const AdminSidebar = ({ activeTab, setActiveTab, sidebarOpen, setSidebarOpen }) => {
   const { adminSession, logoutAdmin, settings } = useJournal();
 
   const menuItems = [
@@ -31,17 +32,34 @@ export const AdminSidebar = ({ activeTab, setActiveTab }) => {
   ];
 
   return (
-    <aside className="w-64 bg-slate-900 text-slate-300 min-h-screen border-r border-slate-800 flex flex-col justify-between flex-shrink-0">
+    <aside
+      className={`
+        fixed inset-y-0 left-0 z-30 w-64 bg-slate-900 text-slate-300 border-r border-slate-800 flex flex-col justify-between flex-shrink-0
+        transform transition-transform duration-300 ease-in-out
+        ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
+        lg:relative lg:translate-x-0 lg:flex
+      `}
+    >
       {/* Top Section */}
-      <div>
+      <div className="overflow-y-auto">
         {/* Brand Banner */}
         <div className="p-5 border-b border-slate-800 flex items-center justify-between bg-slate-950">
           <div>
             <span className="text-xs uppercase font-bold text-amber-500 tracking-wider">Admin Control Panel</span>
             <h2 className="text-base font-bold text-white font-serif">{settings.short_name || 'IJCAST'}</h2>
           </div>
-          <div className="p-1.5 bg-amber-500/10 text-amber-400 rounded-lg">
-            <Lock className="w-4 h-4" />
+          <div className="flex items-center space-x-2">
+            <div className="p-1.5 bg-amber-500/10 text-amber-400 rounded-lg">
+              <Lock className="w-4 h-4" />
+            </div>
+            {/* Close button — mobile only */}
+            <button
+              onClick={() => setSidebarOpen(false)}
+              className="lg:hidden p-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg transition-colors"
+              aria-label="Close menu"
+            >
+              <X className="w-4 h-4" />
+            </button>
           </div>
         </div>
 
@@ -72,7 +90,7 @@ export const AdminSidebar = ({ activeTab, setActiveTab }) => {
                     : 'text-slate-400 hover:text-white hover:bg-slate-800/70'
                 }`}
               >
-                <Icon className={`w-4 h-4 ${isActive ? 'text-slate-950' : 'text-slate-400'}`} />
+                <Icon className={`w-4 h-4 flex-shrink-0 ${isActive ? 'text-slate-950' : 'text-slate-400'}`} />
                 <span>{item.label}</span>
               </button>
             );

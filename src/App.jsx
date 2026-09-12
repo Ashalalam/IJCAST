@@ -27,6 +27,7 @@ import { Privacy } from './pages/Privacy';
 
 import { AdminLogin } from './pages/admin/AdminLogin';
 import { AdminDashboard } from './pages/admin/AdminDashboard';
+import { NotFound } from './pages/NotFound';
 
 // Layout wrapper for Public pages
 const PublicLayout = ({ children }) => (
@@ -68,6 +69,9 @@ export default function App() {
           <Route path="/apc" element={<PublicLayout><APC /></PublicLayout>} />
           <Route path="/copyright" element={<PublicLayout><Copyright /></PublicLayout>} />
           <Route path="/privacy" element={<PublicLayout><Privacy /></PublicLayout>} />
+
+          {/* 404 catch-all */}
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
     </JournalProvider>

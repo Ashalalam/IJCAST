@@ -161,3 +161,28 @@ CREATE POLICY "Admin Write Editorial Members" ON editorial_members FOR ALL USING
 CREATE POLICY "Admin Write Research Areas" ON research_areas FOR ALL USING (auth.role() = 'authenticated');
 CREATE POLICY "Admin Write Page Content" ON page_content FOR ALL USING (auth.role() = 'authenticated');
 CREATE POLICY "Admin Write Media" ON media FOR ALL USING (auth.role() = 'authenticated');
+
+-- 9. THESES TABLE
+CREATE TABLE IF NOT EXISTS theses (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  degree_type TEXT NOT NULL CHECK (degree_type IN ('PhD', 'M.Tech', 'M.Phil', 'M.Sc', 'MBA')),
+  title TEXT NOT NULL,
+  scholar_name TEXT NOT NULL,
+  guide_names JSONB DEFAULT '[]'::jsonb,   -- Array of guide/supervisor name strings
+  university TEXT NOT NULL,
+  stream TEXT NOT NULL,
+  year INT NOT NULL,
+  abstract TEXT,
+  keywords JSONB DEFAULT '[]'::jsonb,      -- Array of keyword strings
+  pdf_url TEXT,
+  is_published BOOLEAN DEFAULT true,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+ALTER TABLE theses ENABLE ROW LEVEL SECURITY;
+
+-- Public can read published theses
+CREATE POLICY "Public Read Theses" ON theses FOR SELECT USING (is_published = true OR auth.role() = 'authenticated');
+
+-- Authenticated users (admins) can do all operations
+CREATE POLICY "Admin All Theses" ON theses FOR ALL USING (auth.role() = 'authenticated') WITH CHECK (auth.role() = 'authenticated');

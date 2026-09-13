@@ -39,6 +39,7 @@ export const Navbar = () => {
     },
     { name: 'Current Issue', path: '/current-issue' },
     { name: 'Archives', path: '/archives' },
+    { name: 'Theses', path: '/theses' },
     { name: 'Research Areas', path: '/research-areas' },
     { name: 'Publication Ethics', path: '/publication-ethics' },
     { name: 'Indexing', path: '/indexing' },

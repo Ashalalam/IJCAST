@@ -11,6 +11,7 @@ import { ResearchAreaManager } from '../../components/admin/ResearchAreaManager'
 import { PageContentEditor } from '../../components/admin/PageContentEditor';
 import { MediaManager } from '../../components/admin/MediaManager';
 import { SettingsManager } from '../../components/admin/SettingsManager';
+import { ThesisManager } from '../../components/admin/ThesisManager';
 
 import { FolderTree, BookMarked, FileText, Users, Plus, ArrowRight, Eye, ShieldCheck, Menu } from 'lucide-react';
 
@@ -205,6 +206,9 @@ export const AdminDashboard = () => {
 
         {/* Tab 4: Articles */}
         {activeTab === 'articles' && <ArticleManager />}
+
+        {/* Tab 4b: Theses */}
+        {activeTab === 'theses' && <ThesisManager />}
 
         {/* Tab 5: Editorial Board */}
         {activeTab === 'editorial' && <EditorialManager />}

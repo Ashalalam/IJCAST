@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useJournal } from '../../context/JournalContext';
-import { GraduationCap, Plus, Trash2, Eye, EyeOff, Edit, X, Save, Check } from 'lucide-react';
+import { GraduationCap, Plus, Trash2, Eye, EyeOff, Edit, X, Save, Check, Upload, FileText, HardDrive, Link as LinkIcon } from 'lucide-react';
 
 const DEGREE_TYPES = ['PhD', 'M.Tech', 'M.Phil', 'M.Sc', 'MBA'];
 const STREAMS = [
@@ -37,9 +37,45 @@ export const ThesisManager = () => {
   const [filterDegree, setFilterDegree] = useState('All');
   const [filterStream, setFilterStream] = useState('All');
 
+  // PDF upload state
+  const [pdfMode, setPdfMode] = useState('upload'); // 'upload' | 'url'
+  const [dragActive, setDragActive] = useState(false);
+  const [uploadedFileName, setUploadedFileName] = useState('');
+  const fileInputRef = useRef(null);
+
+  const handlePdfFile = (file) => {
+    if (!file) return;
+    if (!file.type.includes('pdf') && !file.name.endsWith('.pdf')) {
+      alert('Please upload a PDF file only.');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      setForm(prev => ({ ...prev, pdf_url: e.target.result }));
+      setUploadedFileName(file.name);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleDrag = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.type === 'dragenter' || e.type === 'dragover') setDragActive(true);
+    else if (e.type === 'dragleave') setDragActive(false);
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(false);
+    if (e.dataTransfer.files?.[0]) handlePdfFile(e.dataTransfer.files[0]);
+  };
+
   const openAdd = () => {
     setForm(emptyForm);
     setEditingId(null);
+    setUploadedFileName('');
+    setPdfMode('upload');
     setShowForm(true);
   };
 
@@ -50,6 +86,9 @@ export const ThesisManager = () => {
       keywords: Array.isArray(thesis.keywords) ? thesis.keywords.join(', ') : thesis.keywords,
     });
     setEditingId(thesis.id);
+    // If existing pdf_url is a real URL (not base64), show URL mode
+    setPdfMode(thesis.pdf_url && !thesis.pdf_url.startsWith('data:') ? 'url' : 'upload');
+    setUploadedFileName('');
     setShowForm(true);
   };
 
@@ -212,28 +251,100 @@ export const ThesisManager = () => {
               />
             </div>
 
-            {/* Keywords + PDF URL */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-slate-300 mb-1">Keywords</label>
-                <input
-                  type="text"
-                  value={form.keywords}
-                  onChange={e => setForm({ ...form, keywords: e.target.value })}
-                  placeholder="Keyword1, Keyword2, ..."
-                  className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white"
-                />
+            {/* Keywords + PDF Upload */}
+            <div>
+              <label className="block text-slate-300 mb-1">Keywords</label>
+              <input
+                type="text"
+                value={form.keywords}
+                onChange={e => setForm({ ...form, keywords: e.target.value })}
+                placeholder="Keyword1, Keyword2, ..."
+                className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white"
+              />
+            </div>
+
+            {/* PDF Upload Section */}
+            <div className="space-y-2">
+              <label className="block text-slate-300">Thesis PDF Document</label>
+
+              {/* Mode toggle */}
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setPdfMode('upload')}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors ${pdfMode === 'upload' ? 'bg-amber-500 text-slate-950' : 'bg-slate-800 text-slate-300 hover:bg-slate-700'}`}
+                >
+                  <Upload className="w-3.5 h-3.5" /> Upload File
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setPdfMode('url')}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors ${pdfMode === 'url' ? 'bg-amber-500 text-slate-950' : 'bg-slate-800 text-slate-300 hover:bg-slate-700'}`}
+                >
+                  <LinkIcon className="w-3.5 h-3.5" /> Paste URL
+                </button>
               </div>
-              <div>
-                <label className="block text-slate-300 mb-1">PDF / Document URL</label>
+
+              {/* Drag & Drop zone */}
+              {pdfMode === 'upload' && (
+                <div
+                  onDragEnter={handleDrag}
+                  onDragOver={handleDrag}
+                  onDragLeave={handleDrag}
+                  onDrop={handleDrop}
+                  className={`rounded-xl border-2 border-dashed p-6 text-center transition-all cursor-pointer ${
+                    dragActive
+                      ? 'border-amber-400 bg-amber-500/10'
+                      : uploadedFileName
+                      ? 'border-emerald-500/50 bg-emerald-500/5'
+                      : 'border-slate-700 hover:border-slate-500 bg-slate-950'
+                  }`}
+                  onClick={() => fileInputRef.current?.click()}
+                >
+                  {uploadedFileName ? (
+                    <div className="flex items-center justify-center gap-2 text-emerald-400">
+                      <FileText className="w-5 h-5 flex-shrink-0" />
+                      <span className="text-xs font-semibold truncate max-w-xs">{uploadedFileName}</span>
+                      <button
+                        type="button"
+                        onClick={e => { e.stopPropagation(); setUploadedFileName(''); setForm(prev => ({ ...prev, pdf_url: '' })); }}
+                        className="ml-1 p-0.5 rounded hover:bg-emerald-500/20 text-emerald-300"
+                      >
+                        <X className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="space-y-2">
+                      <div className="w-10 h-10 bg-amber-500/10 rounded-xl flex items-center justify-center mx-auto border border-amber-500/20">
+                        <Upload className="w-5 h-5 text-amber-400" />
+                      </div>
+                      <p className="text-xs font-semibold text-white">Drag & drop PDF here</p>
+                      <p className="text-[11px] text-slate-400">or click to browse</p>
+                      <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs rounded-lg">
+                        <HardDrive className="w-3.5 h-3.5" /> Browse File
+                      </div>
+                    </div>
+                  )}
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept=".pdf"
+                    className="hidden"
+                    onChange={e => e.target.files?.[0] && handlePdfFile(e.target.files[0])}
+                  />
+                </div>
+              )}
+
+              {/* URL input */}
+              {pdfMode === 'url' && (
                 <input
                   type="url"
                   value={form.pdf_url}
                   onChange={e => setForm({ ...form, pdf_url: e.target.value })}
-                  placeholder="https://..."
-                  className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white font-mono"
+                  placeholder="https://example.com/thesis.pdf"
+                  className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white font-mono text-xs"
                 />
-              </div>
+              )}
             </div>
 
             {/* Publish toggle */}

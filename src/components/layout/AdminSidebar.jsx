@@ -13,8 +13,7 @@ import {
   LogOut,
   Globe,
   Lock,
-  X,
-  GraduationCap
+  X
 } from 'lucide-react';
 
 export const AdminSidebar = ({ activeTab, setActiveTab, sidebarOpen, setSidebarOpen }) => {
@@ -25,7 +24,6 @@ export const AdminSidebar = ({ activeTab, setActiveTab, sidebarOpen, setSidebarO
     { id: 'volumes', label: 'Volume Management', icon: FolderTree },
     { id: 'issues', label: 'Issue / Number Management', icon: BookMarked },
     { id: 'articles', label: 'Article Management', icon: FileText },
-    { id: 'theses', label: 'Thesis Repository', icon: GraduationCap },
     { id: 'editorial', label: 'Editorial Board', icon: Users },
     { id: 'research-areas', label: 'Research Areas', icon: Compass },
     { id: 'pages', label: 'Website Pages (CMS)', icon: FileCode },

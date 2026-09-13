@@ -19,8 +19,7 @@ const STORAGE_KEYS = {
   RESEARCH_AREAS: 'ijcast_research_areas',
   PAGE_CONTENT: 'ijcast_page_content',
   MEDIA: 'ijcast_media',
-  ADMIN_SESSION: 'ijcast_admin_session',
-  THESES: 'ijcast_theses'
+  ADMIN_SESSION: 'ijcast_admin_session'
 };
 
 // Helper for LocalStorage Persistence

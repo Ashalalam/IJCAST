@@ -300,20 +300,29 @@ export const JournalProvider = ({ children }) => {
   // Articles
   const saveArticle = async (articleData) => {
     if (isSupabaseConfigured && supabase) {
+      const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
       const isNew = !articleData.id || articleData.id.startsWith('art-');
       if (isNew) {
-        // Strip fake local id so Supabase generates a real UUID
+        // Strip fake local id and invalid foreign keys
         const { id: _fakeId, ...rest } = articleData;
-        const payload = { ...rest, sort_order: articles.length + 1, created_at: new Date().toISOString() };
-        const { data: inserted, error } = await supabase.from('articles').insert(payload).select().single();
-        if (!error && inserted) {
-          const normalized = normalizeArticles([inserted])[0];
+        const payload = {
+          ...rest,
+          issue_id: rest.issue_id && uuidRegex.test(rest.issue_id) ? rest.issue_id : null,
+          sort_order: articles.length + 1,
+          created_at: new Date().toISOString()
+        };
+        const { data: inserted, error } = await supabase.from('articles').insert(payload).select();
+        if (error) {
+          console.error('Article insert error:', error.message, error.details);
+        } else if (inserted && inserted.length > 0) {
+          const normalized = normalizeArticles(inserted)[0];
           setArticles(prev => [normalized, ...prev]);
           return;
         }
       } else {
         // Real UUID — update in place
-        await supabase.from('articles').update(articleData).eq('id', articleData.id);
+        const { error } = await supabase.from('articles').update(articleData).eq('id', articleData.id);
+        if (error) console.error('Article update error:', error.message);
         setArticles(prev => prev.map(a => a.id === articleData.id ? { ...a, ...normalizeArticles([articleData])[0] } : a));
         return;
       }

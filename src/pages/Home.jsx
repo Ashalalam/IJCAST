@@ -20,7 +20,7 @@ import {
 } from 'lucide-react';
 
 export const Home = () => {
-  const { settings, articles, researchAreas, editorialMembers, setIsSubmitOpen } = useJournal();
+  const { settings, articles, researchAreas, editorialMembers, setIsSubmitOpen, isLoading } = useJournal();
 
   const publishedArticles = articles.filter(a => a.is_published);
   const latestArticles = publishedArticles.slice(0, 4);
@@ -242,7 +242,12 @@ export const Home = () => {
           </div>
 
           <div className="space-y-4">
-            {latestArticles.length === 0 ? (
+            {isLoading ? (
+              <div className="text-center py-12 bg-white rounded-2xl border border-slate-200 text-slate-400 text-sm">
+                <div className="w-8 h-8 border-4 border-amber-400 border-t-transparent rounded-full animate-spin mx-auto mb-3"></div>
+                Loading articles...
+              </div>
+            ) : latestArticles.length === 0 ? (
               <div className="text-center py-12 bg-white rounded-2xl border border-slate-200 text-slate-400 text-sm">
                 No published research papers available at the moment.
               </div>

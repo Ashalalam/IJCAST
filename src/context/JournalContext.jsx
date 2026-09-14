@@ -53,6 +53,7 @@ export const JournalProvider = ({ children }) => {
   const [mediaItems, setMediaItems] = useState(() => getLocalStore(STORAGE_KEYS.MEDIA, []));
   const [adminSession, setAdminSession] = useState(() => getLocalStore(STORAGE_KEYS.ADMIN_SESSION, null));
   const [theses, setTheses] = useState(() => getLocalStore(STORAGE_KEYS.THESES, []));
+  const [isLoading, setIsLoading] = useState(true);
 
   // Global Modal States
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -73,7 +74,10 @@ export const JournalProvider = ({ children }) => {
 
   // Load from Supabase if configured
   useEffect(() => {
-    if (!isSupabaseConfigured || !supabase) return;
+    if (!isSupabaseConfigured || !supabase) {
+      setIsLoading(false);
+      return;
+    }
 
     const fetchSupabaseData = async () => {
       try {
@@ -164,6 +168,8 @@ export const JournalProvider = ({ children }) => {
         }
       } catch (err) {
         console.warn('Supabase fetch error, maintaining local state:', err);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -591,7 +597,8 @@ export const JournalProvider = ({ children }) => {
     isSubmitOpen,
     setIsSubmitOpen,
     pdfModalData,
-    setPdfModalData
+    setPdfModalData,
+    isLoading
   };
 
   return (

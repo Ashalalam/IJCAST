@@ -11,7 +11,7 @@ export const initialJournalSettings = {
   eissn: 'e-ISSN 2349-9923',
   doi_prefix: '10.5281/ijcast',
   publisher: 'Gyan Akshar Sanskriti Foundation',
-  publication_frequency: 'Quarterly (4 Issues Per Year) — Issue 1: Jan–Mar | Issue 2: Apr–Jun | Issue 3: Jul–Sep | Issue 4: Oct–Dec',
+  publication_frequency: 'Quarterly (4 Issues Per Year)',
   language: 'English',
   contact_email: 'editor@ijcast.org',
   alternate_email: 'ijcast.journal@gmail.com',

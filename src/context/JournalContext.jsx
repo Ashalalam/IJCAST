@@ -90,8 +90,8 @@ export const JournalProvider = ({ children }) => {
             publisher: (set.publisher === 'IJCAST Academic Research Publications Group' || !set.publisher)
               ? 'Gyan Akshar Sanskriti Foundation'
               : set.publisher,
-            publication_frequency: (set.publication_frequency === 'Bi-Monthly (6 Issues per Year)' || set.publication_frequency === 'Quarterly (4 Issues Per Year)' || !set.publication_frequency)
-              ? 'Quarterly (4 Issues Per Year) — Issue 1: Jan–Mar | Issue 2: Apr–Jun | Issue 3: Jul–Sep | Issue 4: Oct–Dec'
+            publication_frequency: (set.publication_frequency === 'Bi-Monthly (6 Issues per Year)' || set.publication_frequency === 'Quarterly (4 Issues Per Year) — Issue 1: Jan–Mar | Issue 2: Apr–Jun | Issue 3: Jul–Sep | Issue 4: Oct–Dec' || !set.publication_frequency)
+              ? 'Quarterly (4 Issues Per Year)'
               : set.publication_frequency,
           };
           setSettings(corrected);

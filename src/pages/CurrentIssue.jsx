@@ -16,6 +16,11 @@ export const CurrentIssue = () => {
     ? articles.filter(a => a.issue_id === activeIssue.id && a.is_published)
     : [];
 
+  // Fallback: if no articles linked to the issue, show all published articles
+  const displayArticles = currentArticles.length > 0
+    ? currentArticles
+    : articles.filter(a => a.is_published);
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-8 py-12 space-y-10">
       {/* Issue Banner */}
@@ -52,17 +57,17 @@ export const CurrentIssue = () => {
       <div className="space-y-6">
         <div className="flex items-center justify-between border-b border-slate-200 pb-3">
           <h2 className="text-xl font-bold font-serif text-slate-900">
-            Published Articles ({currentArticles.length})
+            Published Articles ({displayArticles.length})
           </h2>
         </div>
 
-        {currentArticles.length === 0 ? (
+        {displayArticles.length === 0 ? (
           <div className="text-center py-16 bg-white rounded-2xl border border-slate-200 text-slate-400 text-sm">
             No published articles in this current issue yet.
           </div>
         ) : (
           <div className="space-y-6">
-            {currentArticles.map(art => (
+            {displayArticles.map(art => (
               <ArticleCard key={art.id} article={art} />
             ))}
           </div>

@@ -96,7 +96,7 @@ export const JournalProvider = ({ children }) => {
             await supabase.from('journal_settings').update({
               publisher: corrected.publisher,
               publication_frequency: corrected.publication_frequency,
-            }).eq('id', set.id).catch(() => {});
+            }).eq('id', set.id);
           }
         }
 
@@ -105,7 +105,8 @@ export const JournalProvider = ({ children }) => {
           setVolumes(vols);
         } else {
           setVolumes(initialVolumes);
-          await supabase.from('volumes').insert(initialVolumes).catch(() => {});
+          const { id: _v, ...volRest } = initialVolumes[0] || {};
+          await supabase.from('volumes').insert(initialVolumes.map(({ id, ...r }) => r));
         }
 
         const { data: iss } = await supabase.from('issues').select('*').order('sort_order', { ascending: true });
@@ -113,15 +114,13 @@ export const JournalProvider = ({ children }) => {
           setIssues(iss);
         } else {
           setIssues(initialIssues);
-          await supabase.from('issues').insert(initialIssues).catch(() => {});
         }
 
-        const { data: arts } = await supabase.from('articles').select('*').order('sort_order', { ascending: true });
-        if (arts && arts.length > 0) {
+        const { data: arts, error: artsErr } = await supabase.from('articles').select('*').order('sort_order', { ascending: true });
+        if (artsErr) {
+          console.warn('Articles fetch error:', artsErr.message);
+        } else if (arts && arts.length > 0) {
           setArticles(normalizeArticles(arts));
-        } else {
-          // Supabase empty — keep whatever is already in state (don't overwrite with stale mock)
-          console.log('Articles table empty in Supabase — using local state');
         }
 
         const { data: eds } = await supabase.from('editorial_members').select('*').order('sort_order', { ascending: true });
@@ -129,7 +128,6 @@ export const JournalProvider = ({ children }) => {
           setEditorialMembers(eds);
         } else {
           setEditorialMembers(initialEditorialMembers);
-          await supabase.from('editorial_members').insert(initialEditorialMembers).catch(() => {});
         }
 
         const { data: ras } = await supabase.from('research_areas').select('*').order('sort_order', { ascending: true });
@@ -137,7 +135,6 @@ export const JournalProvider = ({ children }) => {
           setResearchAreas(normalizeResearchAreas(ras));
         } else {
           setResearchAreas(initialResearchAreas);
-          await supabase.from('research_areas').insert(initialResearchAreas).catch(() => {});
         }
 
         const { data: pgs } = await supabase.from('page_content').select('*');
@@ -145,23 +142,16 @@ export const JournalProvider = ({ children }) => {
           setPageContents(pgs);
         } else {
           setPageContents(initialPageContent);
-          await supabase.from('page_content').insert(initialPageContent).catch(() => {});
         }
 
         const { data: med } = await supabase.from('media').select('*').order('uploaded_at', { ascending: false });
         if (med && med.length > 0) {
           setMediaItems(med);
-        } else {
-          setMediaItems(initialMedia);
-          await supabase.from('media').insert(initialMedia).catch(() => {});
         }
 
         const { data: ths } = await supabase.from('theses').select('*').order('created_at', { ascending: false });
         if (ths && ths.length > 0) {
           setTheses(ths.map(t => ({ ...t, guide_names: parseJsonField(t.guide_names), keywords: parseJsonField(t.keywords) })));
-        } else {
-          setTheses(initialTheses);
-          await supabase.from('theses').insert(initialTheses).catch(() => {});
         }
       } catch (err) {
         console.warn('Supabase fetch error, maintaining local state:', err);

@@ -119,6 +119,15 @@ export const JournalProvider = ({ children }) => {
         const { data: arts, error: artsErr } = await supabase.from('articles').select('*').order('sort_order', { ascending: true });
         if (artsErr) {
           console.warn('Articles fetch error:', artsErr.message);
+          // Fallback: use native fetch directly
+          try {
+            const res = await fetch(
+              `${import.meta.env.VITE_SUPABASE_URL}/rest/v1/articles?select=*&order=sort_order.asc`,
+              { headers: { 'apikey': import.meta.env.VITE_SUPABASE_ANON_KEY, 'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}` } }
+            );
+            const fallbackArts = await res.json();
+            if (Array.isArray(fallbackArts) && fallbackArts.length > 0) setArticles(normalizeArticles(fallbackArts));
+          } catch (fe) { console.warn('Fallback fetch failed:', fe); }
         } else if (arts && arts.length > 0) {
           setArticles(normalizeArticles(arts));
         }

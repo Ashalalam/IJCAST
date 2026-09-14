@@ -77,7 +77,7 @@ export const JournalProvider = ({ children }) => {
 
     const fetchSupabaseData = async () => {
       try {
-        const { data: set } = await supabase.from('journal_settings').select('*').single();
+        const { data: set } = await supabase.from('journal_settings').select('*').maybeSingle();
         if (set) {
           // Merge in correct canonical values in case they were saved incorrectly before
           const corrected = {

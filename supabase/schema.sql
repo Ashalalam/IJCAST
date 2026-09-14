@@ -142,25 +142,16 @@ ALTER TABLE research_areas ENABLE ROW LEVEL SECURITY;
 ALTER TABLE page_content ENABLE ROW LEVEL SECURITY;
 ALTER TABLE media ENABLE ROW LEVEL SECURITY;
 
--- Public READ policies (anyone can read published content)
-CREATE POLICY "Public Read Journal Settings" ON journal_settings FOR SELECT USING (true);
-CREATE POLICY "Public Read Volumes" ON volumes FOR SELECT USING (true);
-CREATE POLICY "Public Read Issues" ON issues FOR SELECT USING (true);
-CREATE POLICY "Public Read Articles" ON articles FOR SELECT USING (is_published = true OR auth.role() = 'authenticated');
-CREATE POLICY "Public Read Editorial Members" ON editorial_members FOR SELECT USING (is_active = true OR auth.role() = 'authenticated');
-CREATE POLICY "Public Read Research Areas" ON research_areas FOR SELECT USING (true);
-CREATE POLICY "Public Read Page Content" ON page_content FOR SELECT USING (true);
-CREATE POLICY "Public Read Media" ON media FOR SELECT USING (true);
-
--- Authenticated ADMIN WRITE policies (Only authenticated admin can insert/update/delete)
-CREATE POLICY "Admin Write Journal Settings" ON journal_settings FOR ALL USING (auth.role() = 'authenticated');
-CREATE POLICY "Admin Write Volumes" ON volumes FOR ALL USING (auth.role() = 'authenticated');
-CREATE POLICY "Admin Write Issues" ON issues FOR ALL USING (auth.role() = 'authenticated');
-CREATE POLICY "Admin Write Articles" ON articles FOR ALL USING (auth.role() = 'authenticated');
-CREATE POLICY "Admin Write Editorial Members" ON editorial_members FOR ALL USING (auth.role() = 'authenticated');
-CREATE POLICY "Admin Write Research Areas" ON research_areas FOR ALL USING (auth.role() = 'authenticated');
-CREATE POLICY "Admin Write Page Content" ON page_content FOR ALL USING (auth.role() = 'authenticated');
-CREATE POLICY "Admin Write Media" ON media FOR ALL USING (auth.role() = 'authenticated');
+-- Allow ALL operations for everyone (anon + authenticated)
+-- This app uses a single admin with app-level auth, not Supabase Auth
+CREATE POLICY "Allow All Journal Settings" ON journal_settings FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "Allow All Volumes" ON volumes FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "Allow All Issues" ON issues FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "Allow All Articles" ON articles FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "Allow All Editorial Members" ON editorial_members FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "Allow All Research Areas" ON research_areas FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "Allow All Page Content" ON page_content FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "Allow All Media" ON media FOR ALL USING (true) WITH CHECK (true);
 
 -- 9. THESES TABLE
 CREATE TABLE IF NOT EXISTS theses (

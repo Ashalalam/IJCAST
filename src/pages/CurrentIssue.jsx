@@ -18,8 +18,10 @@ export const CurrentIssue = () => {
 
   // Fallback: if no articles linked to the issue, show all published articles
   const displayArticles = currentArticles.length > 0
-    ? currentArticles
-    : articles.filter(a => a.is_published);
+    ? currentArticles.sort((a, b) => new Date(b.published_date || b.created_at) - new Date(a.published_date || a.created_at))
+    : articles
+        .filter(a => a.is_published)
+        .sort((a, b) => new Date(b.published_date || b.created_at) - new Date(a.published_date || a.created_at));
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-8 py-12 space-y-10">

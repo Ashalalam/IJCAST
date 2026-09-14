@@ -22,7 +22,9 @@ import {
 export const Home = () => {
   const { settings, articles, researchAreas, editorialMembers, setIsSubmitOpen, isLoading } = useJournal();
 
-  const publishedArticles = articles.filter(a => a.is_published);
+  const publishedArticles = articles
+    .filter(a => a.is_published)
+    .sort((a, b) => new Date(b.published_date || b.created_at) - new Date(a.published_date || a.created_at));
   const latestArticles = publishedArticles.slice(0, 4);
 
   return (

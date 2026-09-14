@@ -245,8 +245,8 @@ export const EditorialManager = () => {
       )}
 
       {/* Table with Actions: Add | Edit | Delete | Activate | Deactivate | Reorder */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
-        <table className="w-full text-left text-xs text-slate-300">
+      <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-x-auto shadow-xl">
+        <table className="w-full text-left text-xs text-slate-300 min-w-[700px]">
           <thead className="bg-slate-950 text-slate-400 uppercase font-mono text-[10px] border-b border-slate-800">
             <tr>
               <th className="p-4">Reorder</th>
@@ -280,15 +280,17 @@ export const EditorialManager = () => {
                     </button>
                   </div>
                 </td>
-                <td className="p-4 font-bold text-white font-serif flex items-center space-x-3">
-                  <img
-                    src={mem.photo_url || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=400&auto=format&fit=crop'}
-                    alt={mem.name}
-                    className="w-9 h-9 rounded-full object-cover border-2 border-amber-500 flex-shrink-0"
-                  />
-                  <div>
-                    <p className="text-white text-sm">{mem.name}</p>
-                    <p className="text-[10px] text-slate-400 font-mono">{mem.email}</p>
+                <td className="p-4">
+                  <div className="flex items-center space-x-3 font-bold text-white font-serif">
+                    <img
+                      src={mem.photo_url || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=400&auto=format&fit=crop'}
+                      alt={mem.name}
+                      className="w-9 h-9 rounded-full object-cover border-2 border-amber-500 flex-shrink-0"
+                    />
+                    <div>
+                      <p className="text-white text-sm">{mem.name}</p>
+                      <p className="text-[10px] text-slate-400 font-mono">{mem.email}</p>
+                    </div>
                   </div>
                 </td>
                 <td className="p-4 font-semibold text-amber-400">{mem.role}</td>

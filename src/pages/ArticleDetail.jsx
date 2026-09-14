@@ -184,7 +184,7 @@ export const ArticleDetail = () => {
               </div>
             </div>
 
-            <div className="flex items-center space-x-3">
+            <div className="flex flex-wrap items-center gap-2">
               <button
                 onClick={() => setPdfModalData({ url: article.pdf_url, title: article.title })}
                 className="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold rounded-xl border border-slate-700 transition-colors"
@@ -220,12 +220,12 @@ export const ArticleDetail = () => {
               <span>Cite This Article</span>
             </h4>
 
-            <div className="flex items-center space-x-1 text-xs">
+            <div className="flex flex-wrap items-center gap-2 text-xs">
               {['APA', 'MLA', 'BibTeX'].map(fmt => (
                 <button
                   key={fmt}
                   onClick={() => setCitationFormat(fmt)}
-                  className={`px-3 py-1 rounded-lg font-semibold transition-colors ${
+                  className={`px-3 py-2 rounded-lg font-semibold transition-colors ${
                     citationFormat === fmt ? 'bg-amber-600 text-white' : 'bg-white text-slate-600 border border-slate-200'
                   }`}
                 >

@@ -204,7 +204,7 @@ export const Home = () => {
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {researchAreas.slice(0, 8).map((area) => (
               <div key={area.id} className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:border-amber-400 hover:shadow-md transition-all space-y-3">
                 <div className="flex items-center space-x-3">
@@ -274,7 +274,7 @@ export const Home = () => {
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             {editorialMembers.filter(m => m.is_active).slice(0, 3).map(mem => (
               <div key={mem.id} className="bg-slate-950 p-5 rounded-xl border border-slate-800 space-y-3">
                 <div className="flex items-center space-x-3">

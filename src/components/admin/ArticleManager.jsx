@@ -515,7 +515,7 @@ export const ArticleManager = () => {
           </div>
 
           {/* Section 4: Timeline Dates */}
-          <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 text-xs">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
             <div>
               <label className="block text-slate-300 mb-1">Received Date</label>
               <input
@@ -702,8 +702,8 @@ export const ArticleManager = () => {
       )}
 
       {/* Articles Table with Drag & Drop Position Order */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
-        <table className="w-full text-left text-xs text-slate-300">
+      <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-x-auto shadow-xl">
+        <table className="w-full text-left text-xs text-slate-300 min-w-[700px]">
           <thead className="bg-slate-950 text-slate-400 uppercase font-mono text-[10px] border-b border-slate-800">
             <tr>
               <th className="p-4">Article Order</th>

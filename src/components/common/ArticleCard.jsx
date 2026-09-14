@@ -124,28 +124,28 @@ export const ArticleCard = ({ article }) => {
 
       {/* Actions: View Article, Citation, Preview PDF, Download PDF */}
       <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
-        <div className="flex items-center space-x-2">
+        <div className="flex flex-wrap items-center gap-2">
           <Link
             to={`/article/${article.id}`}
-            className="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-medium rounded-lg transition-colors"
+            className="px-3 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-medium rounded-lg transition-colors"
           >
             View Full Article
           </Link>
           <button
             onClick={() => setShowCitation(!showCitation)}
-            className="flex items-center space-x-1 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-medium rounded-lg transition-colors"
+            className="flex items-center space-x-1 px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-medium rounded-lg transition-colors"
           >
             <Quote className="w-3.5 h-3.5 text-slate-500" />
             <span>Cite</span>
           </button>
         </div>
 
-        <div className="flex items-center space-x-2">
+        <div className="flex flex-wrap items-center gap-2">
           {article.pdf_url && (
             <>
               <button
                 onClick={() => setPdfModalData({ url: article.pdf_url, title: article.title })}
-                className="flex items-center space-x-1 px-3 py-1.5 bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 text-xs font-medium rounded-lg transition-colors"
+                className="flex items-center space-x-1 px-3 py-2 bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 text-xs font-medium rounded-lg transition-colors"
               >
                 <FileText className="w-3.5 h-3.5" />
                 <span>Preview PDF</span>
@@ -153,7 +153,7 @@ export const ArticleCard = ({ article }) => {
               <a
                 href={article.pdf_url}
                 download
-                className="flex items-center space-x-1 px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white text-xs font-medium rounded-lg shadow-sm transition-colors"
+                className="flex items-center space-x-1 px-3 py-2 bg-amber-600 hover:bg-amber-700 text-white text-xs font-medium rounded-lg shadow-sm transition-colors"
               >
                 <Download className="w-3.5 h-3.5" />
                 <span>Download PDF</span>

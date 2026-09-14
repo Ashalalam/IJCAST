@@ -94,7 +94,7 @@ export function Theses() {
               <button
                 key={d}
                 onClick={() => setFilterDegree(d)}
-                className={`px-3 py-1 rounded-lg text-xs font-semibold transition-colors ${filterDegree === d ? 'bg-amber-500 text-slate-950' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
+                className={`px-3 py-2 rounded-lg text-xs font-semibold transition-colors ${filterDegree === d ? 'bg-amber-500 text-slate-950' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
               >{d}</button>
             ))}
           </div>
@@ -105,7 +105,7 @@ export function Theses() {
             <select
               value={filterStream}
               onChange={e => setFilterStream(e.target.value)}
-              className="bg-slate-100 border border-slate-200 rounded-lg px-2 py-1 text-xs text-slate-700 focus:outline-none focus:border-amber-400"
+              className="bg-slate-100 border border-slate-200 rounded-lg px-2 py-2 text-xs text-slate-700 focus:outline-none focus:border-amber-400"
             >
               {streams.map(s => <option key={s} value={s}>{s}</option>)}
             </select>
@@ -196,7 +196,7 @@ export function Theses() {
                         target="_blank"
                         rel="noopener noreferrer"
                         download
-                        className="flex items-center space-x-1.5 px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white text-xs font-medium rounded-lg shadow-sm transition-colors"
+                        className="flex items-center space-x-1.5 px-3 py-2.5 bg-amber-600 hover:bg-amber-700 text-white text-xs font-medium rounded-lg shadow-sm transition-colors"
                       >
                         <Download className="w-3.5 h-3.5" />
                         <span>Download Thesis</span>

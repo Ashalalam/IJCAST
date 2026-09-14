@@ -67,14 +67,14 @@ export const Contact = () => {
           <div className="space-y-4">
             <div className="p-5 bg-slate-950 border border-slate-800 rounded-2xl space-y-1">
               <span className="text-xs uppercase font-bold text-slate-400">Editor-in-Chief & Submissions</span>
-              <p className="text-xl font-bold text-amber-400 font-mono">{settings.contact_email}</p>
+              <p className="text-xl font-bold text-amber-400 font-mono break-all">{settings.contact_email}</p>
               <p className="text-xs text-slate-400">For manuscript submissions, revision uploads, and peer review queries.</p>
             </div>
 
             {settings.alternate_email && (
               <div className="p-5 bg-slate-950 border border-slate-800 rounded-2xl space-y-1">
                 <span className="text-xs uppercase font-bold text-slate-400">General Administrative Office</span>
-                <p className="text-lg font-bold text-slate-200 font-mono">{settings.alternate_email}</p>
+                <p className="text-lg font-bold text-slate-200 font-mono break-all">{settings.alternate_email}</p>
                 <p className="text-xs text-slate-400">For publisher requests, indexing confirmations, and technical queries.</p>
               </div>
             )}

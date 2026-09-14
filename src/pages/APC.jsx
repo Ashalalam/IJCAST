@@ -35,16 +35,16 @@ IJCAST provides partial or full fee waivers for researchers from low-income econ
       </div>
 
       {/* Main Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
         {/* Left Column: Detailed Fee Breakdown */}
-        <div className="lg:col-span-8 bg-white p-8 sm:p-10 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+        <div className="md:col-span-8 bg-white p-8 sm:p-10 rounded-2xl border border-slate-200 shadow-sm space-y-6">
           <div className="prose prose-slate text-sm text-slate-700 leading-relaxed whitespace-pre-wrap font-sans">
             {apcContent}
           </div>
         </div>
 
         {/* Right Column: Key Rules Summary Card */}
-        <div className="lg:col-span-4 space-y-6">
+        <div className="md:col-span-4 space-y-6">
           <div className="bg-amber-50 border border-amber-200 p-6 rounded-2xl space-y-3 text-amber-950">
             <h3 className="text-base font-bold font-serif flex items-center space-x-2">
               <CheckCircle2 className="w-5 h-5 text-amber-700" />

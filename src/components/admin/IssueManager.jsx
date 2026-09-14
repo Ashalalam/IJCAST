@@ -254,8 +254,8 @@ export const IssueManager = () => {
       )}
 
       {/* Issues Table */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
-        <table className="w-full text-left text-xs text-slate-300">
+      <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-x-auto shadow-xl">
+        <table className="w-full text-left text-xs text-slate-300 min-w-[600px]">
           <thead className="bg-slate-950 text-slate-400 uppercase font-mono text-[10px] border-b border-slate-800">
             <tr>
               <th className="p-4">Reorder</th>

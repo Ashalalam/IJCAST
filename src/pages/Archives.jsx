@@ -33,7 +33,7 @@ export const Archives = () => {
       </div>
 
       {/* Year -> Volume -> Issue Tree Hierarchy */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
         {/* Left Column: Archives Tree Selector */}
         <div className="lg:col-span-4 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
           <h3 className="text-base font-bold font-serif text-slate-900 border-b border-slate-100 pb-3 flex items-center justify-between">
@@ -68,7 +68,7 @@ export const Archives = () => {
                                 <button
                                   key={iss.id}
                                   onClick={() => setSelectedIssueId(iss.id)}
-                                  className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs text-left transition-all ${
+                                  className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs text-left transition-all ${
                                     isSelected
                                       ? 'bg-amber-600 text-white font-bold shadow-sm'
                                       : 'bg-slate-50 hover:bg-slate-100 text-slate-700'

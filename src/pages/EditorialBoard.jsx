@@ -90,7 +90,7 @@ export const EditorialBoard = () => {
             <h2 className="text-2xl font-bold font-serif text-slate-900">Associate Editors</h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             {associateEditors.map(mem => (
               <div key={mem.id} className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
                 <div className="flex items-center space-x-4">
@@ -129,7 +129,7 @@ export const EditorialBoard = () => {
             <h2 className="text-2xl font-bold font-serif text-slate-900">Editorial Board Members</h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             {boardMembers.map(mem => (
               <div key={mem.id} className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-3">
                 <div className="flex items-center space-x-3">

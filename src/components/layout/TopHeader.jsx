@@ -39,14 +39,14 @@ export const TopHeader = () => {
         <div className="flex items-center space-x-3">
           <button
             onClick={() => setIsSearchOpen(true)}
-            className="flex items-center space-x-2 px-3 py-1 bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-200 rounded-lg transition-colors"
+            className="flex items-center space-x-2 px-3 py-2 bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-200 rounded-lg transition-colors"
           >
             <Search className="w-3.5 h-3.5 text-amber-500" />
             <span>Search Articles...</span>
           </button>
           <button
             onClick={() => setIsSubmitOpen(true)}
-            className="px-3 py-1 bg-amber-600 hover:bg-amber-500 text-white font-semibold rounded-lg shadow-sm transition-colors text-xs"
+            className="px-3 py-2 bg-amber-600 hover:bg-amber-500 text-white font-semibold rounded-lg shadow-sm transition-colors text-xs"
           >
             Submit Manuscript
           </button>

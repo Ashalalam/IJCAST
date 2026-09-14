@@ -42,7 +42,7 @@ Following a strategic editorial revitalization in 2026, IJCAST was relaunched as
             <button
               key={t.id}
               onClick={() => setActiveTab(t.id)}
-              className={`flex items-center space-x-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all ${
+              className={`flex items-center space-x-2 px-4 py-3 rounded-xl text-xs font-bold transition-all ${
                 isActive
                   ? 'bg-amber-600 text-white shadow-md'
                   : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200'

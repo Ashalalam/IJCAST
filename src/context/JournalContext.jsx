@@ -314,6 +314,7 @@ export const JournalProvider = ({ children }) => {
         const { data: inserted, error } = await supabase.from('articles').insert(payload).select();
         if (error) {
           console.error('Article insert error:', error.message, error.details);
+          throw new Error(`Supabase insert failed: ${error.message}`);
         } else if (inserted && inserted.length > 0) {
           const normalized = normalizeArticles(inserted)[0];
           setArticles(prev => [normalized, ...prev]);

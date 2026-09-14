@@ -158,8 +158,11 @@ export const ArticleManager = () => {
     }
   };
 
+  const [saveError, setSaveError] = useState('');
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setSaveError('');
 
     const kwArray = typeof formData.keywords === 'string'
       ? formData.keywords.split(',').map(k => k.trim()).filter(Boolean)
@@ -167,16 +170,19 @@ export const ArticleManager = () => {
 
     const mainCorr = formData.authors.find(a => a.is_corresponding) || formData.authors[0];
 
-    await saveArticle({
-      ...(editingArticle !== 'new' ? { id: editingArticle } : {}),
-      ...formData,
-      corresponding_author: mainCorr?.name || formData.corresponding_author,
-      corresponding_author_email: mainCorr?.email || formData.corresponding_author_email,
-      orcids: formData.authors.map(a => a.orcid).filter(Boolean),
-      keywords: kwArray
-    });
-
-    setEditingArticle(null);
+    try {
+      await saveArticle({
+        ...(editingArticle !== 'new' ? { id: editingArticle } : {}),
+        ...formData,
+        corresponding_author: mainCorr?.name || formData.corresponding_author,
+        corresponding_author_email: mainCorr?.email || formData.corresponding_author_email,
+        orcids: formData.authors.map(a => a.orcid).filter(Boolean),
+        keywords: kwArray
+      });
+      setEditingArticle(null);
+    } catch (err) {
+      setSaveError(err.message || 'Save failed');
+    }
   };
 
   const handleMoveOpen = (art) => {
@@ -320,6 +326,12 @@ export const ArticleManager = () => {
               Close Form
             </button>
           </div>
+
+          {saveError && (
+            <div className="p-3 bg-rose-500/20 border border-rose-500/40 text-rose-400 text-xs rounded-xl font-semibold">
+              ❌ Save Error: {saveError}
+            </div>
+          )}
 
           {/* Section 1: Title & Issue */}
           <div className="space-y-4">

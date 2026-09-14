@@ -9,19 +9,17 @@ export const supabase = isSupabaseConfigured
   ? createClient(supabaseUrl, supabaseAnonKey)
   : null;
 
-// Local Storage Keys for offline / fallback mode
-// v2 suffix busts stale cache from previous deployments
 const STORAGE_KEYS = {
   SETTINGS: 'ijcast_settings_v2',
-  VOLUMES: 'ijcast_volumes',
-  ISSUES: 'ijcast_issues',
-  ARTICLES: 'ijcast_articles',
-  EDITORIAL: 'ijcast_editorial',
-  RESEARCH_AREAS: 'ijcast_research_areas',
-  PAGE_CONTENT: 'ijcast_page_content',
-  MEDIA: 'ijcast_media',
+  VOLUMES: 'ijcast_volumes_v2',
+  ISSUES: 'ijcast_issues_v2',
+  ARTICLES: 'ijcast_articles_v2',
+  EDITORIAL: 'ijcast_editorial_v2',
+  RESEARCH_AREAS: 'ijcast_research_areas_v2',
+  PAGE_CONTENT: 'ijcast_page_content_v2',
+  MEDIA: 'ijcast_media_v2',
   ADMIN_SESSION: 'ijcast_admin_session',
-  THESES: 'ijcast_theses'
+  THESES: 'ijcast_theses_v2'
 };
 
 // Helper for LocalStorage Persistence

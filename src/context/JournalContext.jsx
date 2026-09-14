@@ -44,15 +44,15 @@ const normalizeArticles = (arts) =>
 export const JournalProvider = ({ children }) => {
   // State initialization with localStorage fallbacks
   const [settings, setSettings] = useState(() => getLocalStore(STORAGE_KEYS.SETTINGS, initialJournalSettings));
-  const [volumes, setVolumes] = useState(() => getLocalStore(STORAGE_KEYS.VOLUMES, initialVolumes));
-  const [issues, setIssues] = useState(() => getLocalStore(STORAGE_KEYS.ISSUES, initialIssues));
-  const [articles, setArticles] = useState(() => getLocalStore(STORAGE_KEYS.ARTICLES, initialArticles));
-  const [editorialMembers, setEditorialMembers] = useState(() => getLocalStore(STORAGE_KEYS.EDITORIAL, initialEditorialMembers));
+  const [volumes, setVolumes] = useState(() => getLocalStore(STORAGE_KEYS.VOLUMES, []));
+  const [issues, setIssues] = useState(() => getLocalStore(STORAGE_KEYS.ISSUES, []));
+  const [articles, setArticles] = useState(() => getLocalStore(STORAGE_KEYS.ARTICLES, []));
+  const [editorialMembers, setEditorialMembers] = useState(() => getLocalStore(STORAGE_KEYS.EDITORIAL, []));
   const [researchAreas, setResearchAreas] = useState(() => getLocalStore(STORAGE_KEYS.RESEARCH_AREAS, initialResearchAreas));
   const [pageContents, setPageContents] = useState(() => getLocalStore(STORAGE_KEYS.PAGE_CONTENT, initialPageContent));
-  const [mediaItems, setMediaItems] = useState(() => getLocalStore(STORAGE_KEYS.MEDIA, initialMedia));
+  const [mediaItems, setMediaItems] = useState(() => getLocalStore(STORAGE_KEYS.MEDIA, []));
   const [adminSession, setAdminSession] = useState(() => getLocalStore(STORAGE_KEYS.ADMIN_SESSION, null));
-  const [theses, setTheses] = useState(() => getLocalStore(STORAGE_KEYS.THESES, initialTheses));
+  const [theses, setTheses] = useState(() => getLocalStore(STORAGE_KEYS.THESES, []));
 
   // Global Modal States
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -120,21 +120,8 @@ export const JournalProvider = ({ children }) => {
         if (arts && arts.length > 0) {
           setArticles(normalizeArticles(arts));
         } else {
-          // Supabase empty — push whatever is in localStorage (real user articles) to Supabase
-          const localArts = getLocalStore(STORAGE_KEYS.ARTICLES, []);
-          const artsToSync = localArts.length > 0 ? localArts : initialArticles;
-          const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-          // Strip fake local IDs and invalid foreign keys
-          const cleaned = artsToSync.map(({ id, ...rest }) => ({
-            ...rest,
-            issue_id: rest.issue_id && uuidRegex.test(rest.issue_id) ? rest.issue_id : null,
-          }));
-          const { data: inserted } = await supabase.from('articles').insert(cleaned).select().catch(() => ({ data: null }));
-          if (inserted && inserted.length > 0) {
-            setArticles(normalizeArticles(inserted));
-          } else {
-            setArticles(normalizeArticles(artsToSync));
-          }
+          // Supabase empty — keep whatever is already in state (don't overwrite with stale mock)
+          console.log('Articles table empty in Supabase — using local state');
         }
 
         const { data: eds } = await supabase.from('editorial_members').select('*').order('sort_order', { ascending: true });

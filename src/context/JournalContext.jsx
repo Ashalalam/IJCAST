@@ -123,9 +123,13 @@ export const JournalProvider = ({ children }) => {
           // Supabase empty — push whatever is in localStorage (real user articles) to Supabase
           const localArts = getLocalStore(STORAGE_KEYS.ARTICLES, []);
           const artsToSync = localArts.length > 0 ? localArts : initialArticles;
-          // Strip fake local IDs so Supabase generates real UUIDs
-          const cleaned = artsToSync.map(({ id, ...rest }) => rest);
-          const { data: inserted } = await supabase.from('articles').insert(cleaned).select();
+          const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+          // Strip fake local IDs and invalid foreign keys
+          const cleaned = artsToSync.map(({ id, ...rest }) => ({
+            ...rest,
+            issue_id: rest.issue_id && uuidRegex.test(rest.issue_id) ? rest.issue_id : null,
+          }));
+          const { data: inserted } = await supabase.from('articles').insert(cleaned).select().catch(() => ({ data: null }));
           if (inserted && inserted.length > 0) {
             setArticles(normalizeArticles(inserted));
           } else {
@@ -522,8 +526,15 @@ export const JournalProvider = ({ children }) => {
     try {
       // Delete all existing rows first to avoid duplicates
       await supabase.from('articles').delete().neq('id', '00000000-0000-0000-0000-000000000000');
-      // Insert current articles (strip fake IDs)
-      const cleaned = articles.map(({ id, ...rest }) => rest);
+
+      // Clean articles: strip fake local IDs and fake foreign key references
+      const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+      const cleaned = articles.map(({ id, ...rest }) => ({
+        ...rest,
+        // If issue_id is a fake local string (not UUID), set to null
+        issue_id: rest.issue_id && uuidRegex.test(rest.issue_id) ? rest.issue_id : null,
+      }));
+
       const { data: inserted, error } = await supabase.from('articles').insert(cleaned).select();
       if (error) return { success: false, message: error.message };
       if (inserted) {
@@ -531,6 +542,7 @@ export const JournalProvider = ({ children }) => {
         setArticles(normalized);
         return { success: true, count: normalized.length };
       }
+      return { success: false, message: 'No data returned from insert' };
     } catch (err) {
       return { success: false, message: err.message };
     }

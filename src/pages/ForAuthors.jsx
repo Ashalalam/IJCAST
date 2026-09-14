@@ -98,30 +98,51 @@ export const ForAuthors = () => {
           </div>
         </div>
 
-        {/* Paper Template Download */}
-        <div className="mt-4 p-5 bg-gradient-to-r from-amber-50 to-amber-100/60 border border-amber-200 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div className="flex items-start space-x-3">
+        {/* Paper Template + Copyright Transfer Downloads */}
+        <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {/* Paper Template */}
+          <div className="p-5 bg-gradient-to-r from-amber-50 to-amber-100/60 border border-amber-200 rounded-2xl flex items-start space-x-3">
             <div className="p-2.5 bg-amber-500/20 rounded-xl text-amber-700 flex-shrink-0">
               <FileText className="w-5 h-5" />
             </div>
-            <div>
-              <h4 className="text-sm font-bold text-slate-900">IJCAST Manuscript Template</h4>
-              <p className="text-xs text-slate-600 mt-0.5">
-                Download the official IJCAST paper template (.docx) and format your manuscript accordingly before submission.
-              </p>
-              <p className="text-[11px] text-amber-700 font-medium mt-1">
-                File: IJCAST Paper Template.docx — Microsoft Word format
-              </p>
+            <div className="flex-1 space-y-2">
+              <div>
+                <h4 className="text-sm font-bold text-slate-900">IJCAST Manuscript Template</h4>
+                <p className="text-xs text-slate-600 mt-0.5">Official Word template for formatting your paper before submission.</p>
+                <p className="text-[11px] text-amber-700 font-medium mt-1">IJCAST-Paper-Template.docx</p>
+              </div>
+              <a
+                href="/IJCAST-Paper-Template.docx"
+                download="IJCAST Paper Template.docx"
+                className="inline-flex items-center space-x-2 px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs rounded-xl shadow transition-colors"
+              >
+                <Download className="w-3.5 h-3.5" />
+                <span>Download Template</span>
+              </a>
             </div>
           </div>
-          <a
-            href="/IJCAST-Paper-Template.docx"
-            download="IJCAST Paper Template.docx"
-            className="flex-shrink-0 flex items-center space-x-2 px-5 py-2.5 bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs rounded-xl shadow transition-colors"
-          >
-            <Download className="w-4 h-4" />
-            <span>Download Template</span>
-          </a>
+
+          {/* Copyright Transfer Agreement */}
+          <div className="p-5 bg-slate-50 border border-slate-200 rounded-2xl flex items-start space-x-3">
+            <div className="p-2.5 bg-slate-200 rounded-xl text-slate-700 flex-shrink-0">
+              <FileText className="w-5 h-5" />
+            </div>
+            <div className="flex-1 space-y-2">
+              <div>
+                <h4 className="text-sm font-bold text-slate-900">Copyright Transfer Agreement</h4>
+                <p className="text-xs text-slate-600 mt-0.5">Fill, sign and submit this form along with your manuscript.</p>
+                <p className="text-[11px] text-slate-500 font-medium mt-1">IJCAST-Copyright-Transfer-Agreement.pdf</p>
+              </div>
+              <a
+                href="/IJCAST-Copyright-Transfer-Agreement.pdf"
+                download="Copyright Transfer Agreement IJCAST.pdf"
+                className="inline-flex items-center space-x-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs rounded-xl shadow transition-colors"
+              >
+                <Download className="w-3.5 h-3.5" />
+                <span>Download Form</span>
+              </a>
+            </div>
+          </div>
         </div>
       </section>
 

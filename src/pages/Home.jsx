@@ -14,7 +14,9 @@ import {
   Compass,
   FileText,
   Clock,
-  Sparkles
+  Sparkles,
+  Download,
+  FileDown
 } from 'lucide-react';
 
 export const Home = () => {
@@ -302,6 +304,70 @@ export const Home = () => {
             <Send className="w-4 h-4 text-amber-400" />
             <span>Submit via Official Email</span>
           </button>
+        </section>
+
+        {/* Section 6: Author Downloads */}
+        <section className="space-y-4">
+          <div>
+            <span className="text-xs uppercase font-bold text-amber-700 tracking-wider">Author Resources</span>
+            <h2 className="text-2xl font-bold font-serif text-slate-900">Downloads for Authors</h2>
+            <p className="text-sm text-slate-500 mt-1">Download the official templates and forms required for manuscript submission.</p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            {/* Paper Template */}
+            <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm hover:shadow-md hover:border-amber-300 transition-all flex items-start space-x-4">
+              <div className="p-3 bg-amber-50 rounded-xl text-amber-700 flex-shrink-0 border border-amber-100">
+                <FileText className="w-6 h-6" />
+              </div>
+              <div className="flex-1 space-y-2">
+                <div>
+                  <h3 className="text-sm font-bold text-slate-900 font-serif">IJCAST Paper Template</h3>
+                  <p className="text-xs text-slate-500 mt-0.5">
+                    Official Microsoft Word template for formatting your research manuscript as per IJCAST standards.
+                  </p>
+                  <p className="text-[11px] text-slate-400 mt-1 font-mono">IJCAST-Paper-Template.docx</p>
+                </div>
+                <a
+                  href="/IJCAST-Paper-Template.docx"
+                  download="IJCAST Paper Template.docx"
+                  className="inline-flex items-center space-x-1.5 px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs rounded-xl shadow transition-colors"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  <span>Download Template</span>
+                </a>
+              </div>
+            </div>
+
+            {/* Copyright Transfer Agreement */}
+            <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm hover:shadow-md hover:border-amber-300 transition-all flex items-start space-x-4">
+              <div className="p-3 bg-slate-50 rounded-xl text-slate-700 flex-shrink-0 border border-slate-200">
+                <FileDown className="w-6 h-6" />
+              </div>
+              <div className="flex-1 space-y-2">
+                <div>
+                  <h3 className="text-sm font-bold text-slate-900 font-serif">Copyright Transfer Agreement</h3>
+                  <p className="text-xs text-slate-500 mt-0.5">
+                    Mandatory form to be filled, signed by the corresponding author and submitted along with the manuscript.
+                  </p>
+                  <p className="text-[11px] text-slate-400 mt-1 font-mono">IJCAST-Copyright-Transfer-Agreement.pdf</p>
+                </div>
+                <a
+                  href="/IJCAST-Copyright-Transfer-Agreement.pdf"
+                  download="Copyright Transfer Agreement IJCAST.pdf"
+                  className="inline-flex items-center space-x-1.5 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs rounded-xl shadow transition-colors"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  <span>Download Form</span>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {/* Note */}
+          <p className="text-xs text-slate-400 text-center pt-1">
+            Both documents are also available on the <a href="/for-authors" className="text-amber-700 font-semibold hover:underline">For Authors</a> page.
+          </p>
         </section>
       </div>
     </div>

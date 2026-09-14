@@ -228,16 +228,23 @@ export const JournalProvider = ({ children }) => {
 
   // Volumes
   const saveVolume = async (volumeData) => {
-    let updated;
-    if (volumeData.id) {
-      updated = volumes.map(v => v.id === volumeData.id ? { ...v, ...volumeData } : v);
-    } else {
-      const newVol = { ...volumeData, id: `vol-${Date.now()}`, created_at: new Date().toISOString() };
-      updated = [newVol, ...volumes];
-    }
-    setVolumes(updated);
     if (isSupabaseConfigured && supabase) {
-      await supabase.from('volumes').upsert(volumeData);
+      const isNew = !volumeData.id || volumeData.id.startsWith('vol-');
+      if (isNew) {
+        const { id: _, ...rest } = volumeData;
+        const payload = { ...rest, created_at: new Date().toISOString() };
+        const { data: inserted, error } = await supabase.from('volumes').insert(payload).select().single();
+        if (!error && inserted) { setVolumes(prev => [inserted, ...prev]); return; }
+      } else {
+        await supabase.from('volumes').update(volumeData).eq('id', volumeData.id);
+        setVolumes(prev => prev.map(v => v.id === volumeData.id ? { ...v, ...volumeData } : v)); return;
+      }
+    }
+    // Offline fallback
+    if (volumeData.id && !volumeData.id.startsWith('vol-')) {
+      setVolumes(prev => prev.map(v => v.id === volumeData.id ? { ...v, ...volumeData } : v));
+    } else {
+      setVolumes(prev => [{ ...volumeData, id: `vol-${Date.now()}`, created_at: new Date().toISOString() }, ...prev]);
     }
   };
 
@@ -250,16 +257,23 @@ export const JournalProvider = ({ children }) => {
 
   // Issues
   const saveIssue = async (issueData) => {
-    let updated;
-    if (issueData.id) {
-      updated = issues.map(i => i.id === issueData.id ? { ...i, ...issueData } : i);
-    } else {
-      const newIssue = { ...issueData, id: `iss-${Date.now()}`, sort_order: issues.length + 1, created_at: new Date().toISOString() };
-      updated = [...issues, newIssue];
-    }
-    setIssues(updated);
     if (isSupabaseConfigured && supabase) {
-      await supabase.from('issues').upsert(issueData);
+      const isNew = !issueData.id || issueData.id.startsWith('iss-');
+      if (isNew) {
+        const { id: _, ...rest } = issueData;
+        const payload = { ...rest, sort_order: issues.length + 1, created_at: new Date().toISOString() };
+        const { data: inserted, error } = await supabase.from('issues').insert(payload).select().single();
+        if (!error && inserted) { setIssues(prev => [...prev, inserted]); return; }
+      } else {
+        await supabase.from('issues').update(issueData).eq('id', issueData.id);
+        setIssues(prev => prev.map(i => i.id === issueData.id ? { ...i, ...issueData } : i)); return;
+      }
+    }
+    // Offline fallback
+    if (issueData.id && !issueData.id.startsWith('iss-')) {
+      setIssues(prev => prev.map(i => i.id === issueData.id ? { ...i, ...issueData } : i));
+    } else {
+      setIssues(prev => [...prev, { ...issueData, id: `iss-${Date.now()}`, sort_order: issues.length + 1, created_at: new Date().toISOString() }]);
     }
   };
 
@@ -280,16 +294,31 @@ export const JournalProvider = ({ children }) => {
 
   // Articles
   const saveArticle = async (articleData) => {
-    let updated;
-    if (articleData.id) {
-      updated = articles.map(a => a.id === articleData.id ? { ...a, ...articleData } : a);
+    if (isSupabaseConfigured && supabase) {
+      const isNew = !articleData.id || articleData.id.startsWith('art-');
+      if (isNew) {
+        // Strip fake local id so Supabase generates a real UUID
+        const { id: _fakeId, ...rest } = articleData;
+        const payload = { ...rest, sort_order: articles.length + 1, created_at: new Date().toISOString() };
+        const { data: inserted, error } = await supabase.from('articles').insert(payload).select().single();
+        if (!error && inserted) {
+          const normalized = normalizeArticles([inserted])[0];
+          setArticles(prev => [normalized, ...prev]);
+          return;
+        }
+      } else {
+        // Real UUID — update in place
+        await supabase.from('articles').update(articleData).eq('id', articleData.id);
+        setArticles(prev => prev.map(a => a.id === articleData.id ? { ...a, ...normalizeArticles([articleData])[0] } : a));
+        return;
+      }
+    }
+    // Offline / no Supabase fallback — use local id
+    if (articleData.id && !articleData.id.startsWith('art-')) {
+      setArticles(prev => prev.map(a => a.id === articleData.id ? { ...a, ...articleData } : a));
     } else {
       const newArt = { ...articleData, id: `art-${Date.now()}`, sort_order: articles.length + 1, created_at: new Date().toISOString() };
-      updated = [newArt, ...articles];
-    }
-    setArticles(updated);
-    if (isSupabaseConfigured && supabase) {
-      await supabase.from('articles').upsert(articleData);
+      setArticles(prev => [newArt, ...prev]);
     }
   };
 
@@ -330,16 +359,23 @@ export const JournalProvider = ({ children }) => {
 
   // Editorial Members
   const saveEditorialMember = async (memberData) => {
-    let updated;
-    if (memberData.id) {
-      updated = editorialMembers.map(m => m.id === memberData.id ? { ...m, ...memberData } : m);
-    } else {
-      const newMem = { ...memberData, id: `ed-${Date.now()}`, sort_order: editorialMembers.length + 1 };
-      updated = [...editorialMembers, newMem];
-    }
-    setEditorialMembers(updated);
     if (isSupabaseConfigured && supabase) {
-      await supabase.from('editorial_members').upsert(memberData);
+      const isNew = !memberData.id || memberData.id.startsWith('ed-');
+      if (isNew) {
+        const { id: _, ...rest } = memberData;
+        const payload = { ...rest, sort_order: editorialMembers.length + 1 };
+        const { data: inserted, error } = await supabase.from('editorial_members').insert(payload).select().single();
+        if (!error && inserted) { setEditorialMembers(prev => [...prev, inserted]); return; }
+      } else {
+        await supabase.from('editorial_members').update(memberData).eq('id', memberData.id);
+        setEditorialMembers(prev => prev.map(m => m.id === memberData.id ? { ...m, ...memberData } : m)); return;
+      }
+    }
+    // Offline fallback
+    if (memberData.id && !memberData.id.startsWith('ed-')) {
+      setEditorialMembers(prev => prev.map(m => m.id === memberData.id ? { ...m, ...memberData } : m));
+    } else {
+      setEditorialMembers(prev => [...prev, { ...memberData, id: `ed-${Date.now()}`, sort_order: editorialMembers.length + 1 }]);
     }
   };
 
@@ -377,16 +413,23 @@ export const JournalProvider = ({ children }) => {
         ? (() => { try { return JSON.parse(raData.subcategories); } catch { return []; } })()
         : [],
     };
-    let updated;
-    if (normalized.id) {
-      updated = researchAreas.map(r => r.id === normalized.id ? { ...r, ...normalized } : r);
-    } else {
-      const newRa = { ...normalized, id: `ra-${Date.now()}`, sort_order: researchAreas.length + 1 };
-      updated = [...researchAreas, newRa];
-    }
-    setResearchAreas(updated);
     if (isSupabaseConfigured && supabase) {
-      await supabase.from('research_areas').upsert(raData);
+      const isNew = !normalized.id || normalized.id.startsWith('ra-');
+      if (isNew) {
+        const { id: _, ...rest } = normalized;
+        const payload = { ...rest, sort_order: researchAreas.length + 1 };
+        const { data: inserted, error } = await supabase.from('research_areas').insert(payload).select().single();
+        if (!error && inserted) { setResearchAreas(prev => [...prev, { ...inserted, subcategories: parseJsonField(inserted.subcategories) }]); return; }
+      } else {
+        await supabase.from('research_areas').update(normalized).eq('id', normalized.id);
+        setResearchAreas(prev => prev.map(r => r.id === normalized.id ? { ...r, ...normalized } : r)); return;
+      }
+    }
+    // Offline fallback
+    if (normalized.id && !normalized.id.startsWith('ra-')) {
+      setResearchAreas(prev => prev.map(r => r.id === normalized.id ? { ...r, ...normalized } : r));
+    } else {
+      setResearchAreas(prev => [...prev, { ...normalized, id: `ra-${Date.now()}`, sort_order: researchAreas.length + 1 }]);
     }
   };
 
@@ -441,16 +484,26 @@ export const JournalProvider = ({ children }) => {
         ? thesisData.keywords
         : thesisData.keywords.split(',').map(k => k.trim()).filter(Boolean),
     };
-    let updated;
-    if (normalized.id) {
-      updated = theses.map(t => t.id === normalized.id ? { ...t, ...normalized } : t);
-    } else {
-      const newThesis = { ...normalized, id: `thesis-${Date.now()}`, created_at: new Date().toISOString() };
-      updated = [newThesis, ...theses];
-    }
-    setTheses(updated);
     if (isSupabaseConfigured && supabase) {
-      await supabase.from('theses').upsert(normalized);
+      const isNew = !normalized.id || normalized.id.startsWith('thesis-');
+      if (isNew) {
+        const { id: _, ...rest } = normalized;
+        const payload = { ...rest, created_at: new Date().toISOString() };
+        const { data: inserted, error } = await supabase.from('theses').insert(payload).select().single();
+        if (!error && inserted) {
+          setTheses(prev => [{ ...inserted, guide_names: parseJsonField(inserted.guide_names), keywords: parseJsonField(inserted.keywords) }, ...prev]);
+          return;
+        }
+      } else {
+        await supabase.from('theses').update(normalized).eq('id', normalized.id);
+        setTheses(prev => prev.map(t => t.id === normalized.id ? { ...t, ...normalized } : t)); return;
+      }
+    }
+    // Offline fallback
+    if (normalized.id && !normalized.id.startsWith('thesis-')) {
+      setTheses(prev => prev.map(t => t.id === normalized.id ? { ...t, ...normalized } : t));
+    } else {
+      setTheses(prev => [{ ...normalized, id: `thesis-${Date.now()}`, created_at: new Date().toISOString() }, ...prev]);
     }
   };
 

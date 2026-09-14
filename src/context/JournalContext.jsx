@@ -308,6 +308,11 @@ export const JournalProvider = ({ children }) => {
         const payload = {
           ...rest,
           issue_id: rest.issue_id && uuidRegex.test(rest.issue_id) ? rest.issue_id : null,
+          // Convert empty date strings to null — Supabase DATE columns reject ""
+          received_date: rest.received_date || null,
+          revised_date: rest.revised_date || null,
+          accepted_date: rest.accepted_date || null,
+          published_date: rest.published_date || null,
           sort_order: articles.length + 1,
           created_at: new Date().toISOString()
         };
@@ -533,8 +538,11 @@ export const JournalProvider = ({ children }) => {
       const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
       const cleaned = articles.map(({ id, ...rest }) => ({
         ...rest,
-        // If issue_id is a fake local string (not UUID), set to null
         issue_id: rest.issue_id && uuidRegex.test(rest.issue_id) ? rest.issue_id : null,
+        received_date: rest.received_date || null,
+        revised_date: rest.revised_date || null,
+        accepted_date: rest.accepted_date || null,
+        published_date: rest.published_date || null,
       }));
 
       const { data: inserted, error } = await supabase.from('articles').insert(cleaned).select();

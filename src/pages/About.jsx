@@ -119,17 +119,35 @@ Following a strategic editorial revitalization in 2026, IJCAST was relaunched as
         )}
 
         {activeTab === 'frequency' && (
-          <div className="space-y-4">
+          <div className="space-y-6">
             <h2 className="text-2xl font-bold font-serif text-slate-900 border-b border-slate-100 pb-3">Publication Frequency</h2>
             <p className="text-sm text-slate-700 leading-relaxed">
-              IJCAST publishes on a <strong>{settings.publication_frequency || 'Bi-Monthly'}</strong> cycle (6 issues per volume year).
+              IJCAST publishes on a <strong>Quarterly</strong> schedule — <strong>4 issues per volume year</strong>. Each issue covers a 3-month period as follows:
             </p>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs pt-2">
-              {['Issue 1: Jan–Feb', 'Issue 2: Mar–Apr', 'Issue 3: May–Jun', 'Issue 4: Jul–Aug', 'Issue 5: Sep–Oct', 'Issue 6: Nov–Dec'].map((iss, i) => (
-                <div key={i} className="p-3 bg-amber-50 border border-amber-200 text-amber-900 rounded-xl font-semibold text-center">
-                  {iss}
+
+            {/* 4 Quarterly issue cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
+              {[
+                { num: 1, months: 'January – March',   label: '1st Quarter',  color: 'bg-amber-50 border-amber-200 text-amber-900' },
+                { num: 2, months: 'April – June',      label: '2nd Quarter',  color: 'bg-sky-50 border-sky-200 text-sky-900' },
+                { num: 3, months: 'July – September',  label: '3rd Quarter',  color: 'bg-emerald-50 border-emerald-200 text-emerald-900' },
+                { num: 4, months: 'October – December', label: '4th Quarter', color: 'bg-purple-50 border-purple-200 text-purple-900' },
+              ].map((iss) => (
+                <div key={iss.num} className={`p-5 border rounded-2xl space-y-2 text-center shadow-sm ${iss.color}`}>
+                  <p className="text-3xl font-extrabold font-serif opacity-30">0{iss.num}</p>
+                  <p className="font-bold text-sm">Issue {iss.num}</p>
+                  <p className="font-semibold">{iss.months}</p>
+                  <span className="inline-block px-2 py-0.5 bg-white/60 rounded-full text-[10px] font-bold uppercase tracking-wider border border-current/20">
+                    {iss.label}
+                  </span>
                 </div>
               ))}
+            </div>
+
+            <div className="p-4 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-600 space-y-1">
+              <p><strong className="text-slate-800">Volume Year:</strong> One volume per calendar year, containing 4 issues.</p>
+              <p><strong className="text-slate-800">Submission Deadline:</strong> Manuscripts are accepted on a rolling basis throughout the year.</p>
+              <p><strong className="text-slate-800">Publication Mode:</strong> Open Access — all articles freely available online immediately upon publication.</p>
             </div>
           </div>
         )}

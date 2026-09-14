@@ -538,7 +538,7 @@ export const JournalProvider = ({ children }) => {
       const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
       const cleaned = articles.map(({ id, ...rest }) => ({
         ...rest,
-        issue_id: rest.issue_id && uuidRegex.test(rest.issue_id) ? rest.issue_id : null,
+        issue_id: null, // Always null during sync — issues table may be empty
         received_date: rest.received_date || null,
         revised_date: rest.revised_date || null,
         accepted_date: rest.accepted_date || null,

@@ -78,7 +78,27 @@ export const JournalProvider = ({ children }) => {
     const fetchSupabaseData = async () => {
       try {
         const { data: set } = await supabase.from('journal_settings').select('*').single();
-        if (set) setSettings(set);
+        if (set) {
+          // Merge in correct canonical values in case they were saved incorrectly before
+          const corrected = {
+            ...set,
+            short_name: set.short_name || 'IJCAST',
+            publisher: (set.publisher === 'IJCAST Academic Research Publications Group' || !set.publisher)
+              ? 'Gyan Akshar Sanskriti Foundation'
+              : set.publisher,
+            publication_frequency: (set.publication_frequency === 'Bi-Monthly (6 Issues per Year)' || !set.publication_frequency)
+              ? 'Quarterly (4 Issues Per Year)'
+              : set.publication_frequency,
+          };
+          setSettings(corrected);
+          // Silently patch the DB row if it had stale values
+          if (corrected.publisher !== set.publisher || corrected.publication_frequency !== set.publication_frequency) {
+            await supabase.from('journal_settings').update({
+              publisher: corrected.publisher,
+              publication_frequency: corrected.publication_frequency,
+            }).eq('id', set.id).catch(() => {});
+          }
+        }
 
         const { data: vols } = await supabase.from('volumes').select('*').order('year', { ascending: false });
         if (vols && vols.length > 0) {

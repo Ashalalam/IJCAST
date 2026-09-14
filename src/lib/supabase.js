@@ -10,8 +10,9 @@ export const supabase = isSupabaseConfigured
   : null;
 
 // Local Storage Keys for offline / fallback mode
+// v2 suffix busts stale cache from previous deployments
 const STORAGE_KEYS = {
-  SETTINGS: 'ijcast_settings',
+  SETTINGS: 'ijcast_settings_v2',
   VOLUMES: 'ijcast_volumes',
   ISSUES: 'ijcast_issues',
   ARTICLES: 'ijcast_articles',

@@ -120,8 +120,17 @@ export const JournalProvider = ({ children }) => {
         if (arts && arts.length > 0) {
           setArticles(normalizeArticles(arts));
         } else {
-          setArticles(initialArticles);
-          await supabase.from('articles').insert(initialArticles).catch(() => {});
+          // Supabase empty — push whatever is in localStorage (real user articles) to Supabase
+          const localArts = getLocalStore(STORAGE_KEYS.ARTICLES, []);
+          const artsToSync = localArts.length > 0 ? localArts : initialArticles;
+          // Strip fake local IDs so Supabase generates real UUIDs
+          const cleaned = artsToSync.map(({ id, ...rest }) => rest);
+          const { data: inserted } = await supabase.from('articles').insert(cleaned).select();
+          if (inserted && inserted.length > 0) {
+            setArticles(normalizeArticles(inserted));
+          } else {
+            setArticles(normalizeArticles(artsToSync));
+          }
         }
 
         const { data: eds } = await supabase.from('editorial_members').select('*').order('sort_order', { ascending: true });
@@ -507,8 +516,27 @@ export const JournalProvider = ({ children }) => {
     }
   };
 
-  const deleteThesis = async (id) => {
-    setTheses(theses.filter(t => t.id !== id));
+  // Sync all local articles to Supabase (one-time migration)
+  const syncArticlesToSupabase = async () => {
+    if (!isSupabaseConfigured || !supabase) return { success: false, message: 'Supabase not configured' };
+    try {
+      // Delete all existing rows first to avoid duplicates
+      await supabase.from('articles').delete().neq('id', '00000000-0000-0000-0000-000000000000');
+      // Insert current articles (strip fake IDs)
+      const cleaned = articles.map(({ id, ...rest }) => rest);
+      const { data: inserted, error } = await supabase.from('articles').insert(cleaned).select();
+      if (error) return { success: false, message: error.message };
+      if (inserted) {
+        const normalized = normalizeArticles(inserted);
+        setArticles(normalized);
+        return { success: true, count: normalized.length };
+      }
+    } catch (err) {
+      return { success: false, message: err.message };
+    }
+  };
+
+  const deleteThesis = async (id) => {    setTheses(theses.filter(t => t.id !== id));
     if (isSupabaseConfigured && supabase) {
       await supabase.from('theses').delete().eq('id', id);
     }
@@ -539,6 +567,7 @@ export const JournalProvider = ({ children }) => {
     toggleArticlePublish,
     moveArticle,
     reorderArticles,
+    syncArticlesToSupabase,
     editorialMembers,
     saveEditorialMember,
     deleteEditorialMember,

@@ -13,12 +13,14 @@ import { MediaManager } from '../../components/admin/MediaManager';
 import { SettingsManager } from '../../components/admin/SettingsManager';
 import { ThesisManager } from '../../components/admin/ThesisManager';
 
-import { FolderTree, BookMarked, FileText, Users, Plus, ArrowRight, Eye, ShieldCheck, Menu } from 'lucide-react';
+import { FolderTree, BookMarked, FileText, Users, Plus, ArrowRight, Eye, ShieldCheck, Menu, RefreshCw, CloudUpload } from 'lucide-react';
 
 export const AdminDashboard = () => {
-  const { adminSession, volumes, issues, articles, editorialMembers } = useJournal();
+  const { adminSession, volumes, issues, articles, editorialMembers, syncArticlesToSupabase } = useJournal();
   const [activeTab, setActiveTab] = useState('dashboard');
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [syncing, setSyncing] = useState(false);
+  const [syncResult, setSyncResult] = useState(null);
 
   // Protect Admin route
   if (!adminSession) {
@@ -28,10 +30,18 @@ export const AdminDashboard = () => {
   const publishedArticles = articles.filter(a => a.is_published);
   const latestArticlesList = articles.slice(0, 5);
 
-  // Close sidebar when a tab is selected on mobile
   const handleTabChange = (tab) => {
     setActiveTab(tab);
     setSidebarOpen(false);
+  };
+
+  const handleSync = async () => {
+    setSyncing(true);
+    setSyncResult(null);
+    const result = await syncArticlesToSupabase();
+    setSyncResult(result);
+    setSyncing(false);
+    setTimeout(() => setSyncResult(null), 5000);
   };
 
   return (
@@ -79,6 +89,15 @@ export const AdminDashboard = () => {
               </div>
               <div className="flex items-center space-x-2">
                 <button
+                  onClick={handleSync}
+                  disabled={syncing}
+                  className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-60 text-white font-bold text-xs rounded-xl shadow transition-colors flex items-center space-x-1.5"
+                  title="Push all local articles to Supabase so they appear on all devices"
+                >
+                  {syncing ? <RefreshCw className="w-4 h-4 animate-spin" /> : <CloudUpload className="w-4 h-4" />}
+                  <span>{syncing ? 'Syncing...' : 'Sync to Supabase'}</span>
+                </button>
+                <button
                   onClick={() => handleTabChange('articles')}
                   className="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs rounded-xl shadow transition-colors flex items-center space-x-1.5"
                 >
@@ -87,6 +106,16 @@ export const AdminDashboard = () => {
                 </button>
               </div>
             </div>
+
+            {/* Sync result banner */}
+            {syncResult && (
+              <div className={`p-3 rounded-xl text-xs font-semibold flex items-center space-x-2 ${syncResult.success ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-rose-500/20 text-rose-400 border border-rose-500/30'}`}>
+                {syncResult.success
+                  ? <span>✅ Successfully synced {syncResult.count} articles to Supabase! They will now show on all devices.</span>
+                  : <span>❌ Sync failed: {syncResult.message}</span>
+                }
+              </div>
+            )}
 
             {/* Metrics Overview Cards */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">

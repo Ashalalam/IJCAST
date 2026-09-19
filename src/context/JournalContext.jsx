@@ -87,6 +87,8 @@ export const JournalProvider = ({ children }) => {
           const corrected = {
             ...set,
             short_name: set.short_name || 'IJCAST',
+            issn: '',
+            eissn: (set.eissn === 'e-ISSN 2349-9923' || !set.eissn) ? 'e-ISSN XXXX-XXXX' : set.eissn,
             publisher: (set.publisher === 'IJCAST Academic Research Publications Group' || !set.publisher)
               ? 'Gyan Akshar Sanskriti Foundation'
               : set.publisher,
@@ -96,8 +98,10 @@ export const JournalProvider = ({ children }) => {
           };
           setSettings(corrected);
           // Silently patch the DB row if it had stale values
-          if (corrected.publisher !== set.publisher || corrected.publication_frequency !== set.publication_frequency) {
+          if (corrected.publisher !== set.publisher || corrected.publication_frequency !== set.publication_frequency || corrected.eissn !== set.eissn || set.issn) {
             await supabase.from('journal_settings').update({
+              issn: '',
+              eissn: corrected.eissn,
               publisher: corrected.publisher,
               publication_frequency: corrected.publication_frequency,
             }).eq('id', set.id);

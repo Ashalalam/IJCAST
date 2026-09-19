@@ -1,6 +1,6 @@
 import React from 'react';
 import { useJournal } from '../context/JournalContext';
-import { Send, FileText, CheckCircle2, AlertCircle, ArrowRight, ShieldCheck, DollarSign, Layers, ArrowDown, Download } from 'lucide-react';
+import { Send, FileText, CheckCircle2, ArrowRight, ShieldCheck, DollarSign, Layers, ArrowDown, Download } from 'lucide-react';
 
 export const ForAuthors = () => {
   const { settings, setIsSubmitOpen } = useJournal();
@@ -37,17 +37,6 @@ export const ForAuthors = () => {
             <Send className="w-4 h-4" />
             <span>SUBMIT MANUSCRIPT VIA EMAIL</span>
           </button>
-        </div>
-      </div>
-
-      {/* No Author Login Notice Banner */}
-      <div className="bg-amber-50 border border-amber-200 p-6 rounded-2xl flex items-start space-x-4">
-        <AlertCircle className="w-6 h-6 text-amber-700 flex-shrink-0 mt-1" />
-        <div className="space-y-1 text-xs text-amber-900">
-          <h3 className="text-sm font-bold">Important Notice: No Author Login Required</h3>
-          <p>
-            IJCAST operates an efficient email-based editorial system. There is <strong>NO author registration, NO author password, NO online submission form, and NO author tracking dashboard</strong>. Authors simply submit manuscripts to the official journal email address: <span className="font-bold font-mono text-amber-950">{settings.contact_email}</span>.
-          </p>
         </div>
       </div>
 

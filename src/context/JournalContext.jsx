@@ -60,20 +60,20 @@ export const JournalProvider = ({ children }) => {
   const [isSubmitOpen, setIsSubmitOpen] = useState(false);
   const [pdfModalData, setPdfModalData] = useState(null); // { url, title }
 
-  // Sync to LocalStorage whenever state changes
+  // Sync only small/critical data to LocalStorage — NOT articles/media/theses (too large, causes QuotaExceededError)
   useEffect(() => { setLocalStore(STORAGE_KEYS.SETTINGS, settings); }, [settings]);
-  useEffect(() => { setLocalStore(STORAGE_KEYS.VOLUMES, volumes); }, [volumes]);
-  useEffect(() => { setLocalStore(STORAGE_KEYS.ISSUES, issues); }, [issues]);
-  useEffect(() => { setLocalStore(STORAGE_KEYS.ARTICLES, articles); }, [articles]);
-  useEffect(() => { setLocalStore(STORAGE_KEYS.EDITORIAL, editorialMembers); }, [editorialMembers]);
-  useEffect(() => { setLocalStore(STORAGE_KEYS.RESEARCH_AREAS, researchAreas); }, [researchAreas]);
-  useEffect(() => { setLocalStore(STORAGE_KEYS.PAGE_CONTENT, pageContents); }, [pageContents]);
-  useEffect(() => { setLocalStore(STORAGE_KEYS.MEDIA, mediaItems); }, [mediaItems]);
   useEffect(() => { setLocalStore(STORAGE_KEYS.ADMIN_SESSION, adminSession); }, [adminSession]);
-  useEffect(() => { setLocalStore(STORAGE_KEYS.THESES, theses); }, [theses]);
+  useEffect(() => { setLocalStore(STORAGE_KEYS.RESEARCH_AREAS, researchAreas); }, [researchAreas]);
 
   // Load from Supabase if configured
   useEffect(() => {
+    // Clear stale large localStorage keys that caused QuotaExceededError
+    ['ijcast_articles', 'ijcast_articles_v2', 'ijcast_volumes', 'ijcast_volumes_v2',
+     'ijcast_issues', 'ijcast_issues_v2', 'ijcast_editorial', 'ijcast_editorial_v2',
+     'ijcast_media', 'ijcast_media_v2', 'ijcast_theses', 'ijcast_theses_v2',
+     'ijcast_page_content', 'ijcast_page_content_v2'].forEach(key => {
+      try { localStorage.removeItem(key); } catch {}
+    });
     if (!isSupabaseConfigured || !supabase) {
       setIsLoading(false);
       return;

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useJournal } from '../../context/JournalContext';
-import { BookOpen, ShieldCheck, Lock, Award } from 'lucide-react';
+import { BookOpen, ShieldCheck, Lock } from 'lucide-react';
 
 export const Footer = () => {
   const { settings, setIsSubmitOpen } = useJournal();
@@ -55,14 +55,12 @@ export const Footer = () => {
         <div className="space-y-3">
           <h4 className="font-serif font-bold text-slate-200 text-sm">Journal Credentials</h4>
           <div className="p-4 bg-slate-900 border border-slate-800 rounded-xl space-y-2 text-[11px]">
-            <p className="flex items-center space-x-2 text-slate-300 font-medium">
-              <Award className="w-4 h-4 text-amber-500" />
-              <span>{settings.issn || 'ISSN 2349-XXXX'}</span>
-            </p>
-            <p className="flex items-center space-x-2 text-slate-300 font-medium">
-              <ShieldCheck className="w-4 h-4 text-emerald-500" />
-              <span>{settings.eissn || 'e-ISSN 2349-YYYY'}</span>
-            </p>
+            {settings.eissn && (
+              <p className="flex items-center space-x-2 text-slate-300 font-medium">
+                <ShieldCheck className="w-4 h-4 text-emerald-500" />
+                <span>{settings.eissn}</span>
+              </p>
+            )}
             {settings.doi_prefix && (
               <p className="text-slate-400">
                 DOI Prefix: <span className="font-mono text-amber-400">{settings.doi_prefix}</span>

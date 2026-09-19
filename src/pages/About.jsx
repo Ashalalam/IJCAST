@@ -169,8 +169,7 @@ Following a strategic editorial revitalization in 2026, IJCAST was relaunched as
             <h2 className="text-2xl font-bold font-serif text-slate-900 border-b border-slate-100 pb-3">Publisher Information</h2>
             <div className="p-5 bg-slate-50 border border-slate-200 rounded-xl space-y-2 text-sm text-slate-700">
               <p><strong>Publisher Name:</strong> {settings.publisher}</p>
-              <p><strong>ISSN (Print):</strong> {settings.issn}</p>
-              <p><strong>e-ISSN (Online):</strong> {settings.eissn}</p>
+              {settings.eissn && <p><strong>e-ISSN (Online):</strong> {settings.eissn}</p>}
               <p><strong>Official Email:</strong> {settings.contact_email}</p>
               <p><strong>Postal Address:</strong> {settings.postal_address}</p>
             </div>

@@ -51,12 +51,11 @@ export const Home = () => {
 
             {/* Badges Bar */}
             <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 text-xs pt-2">
-              <div className="px-3.5 py-1.5 bg-slate-900 border border-slate-800 rounded-xl text-slate-200 font-medium">
-                <span className="text-amber-400 font-bold mr-1.5">{settings.issn}</span>
-              </div>
-              <div className="px-3.5 py-1.5 bg-slate-900 border border-slate-800 rounded-xl text-slate-200 font-medium">
-                <span className="text-emerald-400 font-bold mr-1.5">{settings.eissn}</span>
-              </div>
+              {settings.eissn && (
+                <div className="px-3.5 py-1.5 bg-slate-900 border border-slate-800 rounded-xl text-slate-200 font-medium">
+                  <span className="text-emerald-400 font-bold mr-1.5">{settings.eissn}</span>
+                </div>
+              )}
               {settings.doi_prefix && (
                 <div className="px-3.5 py-1.5 bg-slate-900 border border-slate-800 rounded-xl text-slate-300 font-mono">
                   <span>DOI Prefix: {settings.doi_prefix}</span>

@@ -221,7 +221,7 @@ export const AdminDashboard = () => {
               >
                 <ShieldCheck className="w-6 h-6 text-amber-400 group-hover:scale-110 transition-transform" />
                 <h4 className="text-sm font-bold text-white font-serif">Journal Credentials</h4>
-                <p className="text-xs text-slate-400">Update ISSN, e-ISSN, and emails.</p>
+                <p className="text-xs text-slate-400">Update e-ISSN, contact emails, and publisher info.</p>
               </button>
             </div>
           </div>

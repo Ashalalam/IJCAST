@@ -19,7 +19,7 @@ export const SettingsManager = () => {
       <div className="flex items-center justify-between border-b border-slate-800 pb-4">
         <div>
           <h2 className="text-xl font-bold font-serif text-white">Journal System Settings</h2>
-          <p className="text-xs text-slate-400">Configure global metadata, ISSN credentials, contact details, and licensing settings.</p>
+          <p className="text-xs text-slate-400">Configure global metadata, e-ISSN, contact details, and licensing settings.</p>
         </div>
 
         {saved && (
@@ -57,22 +57,14 @@ export const SettingsManager = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
-            <div>
-              <label className="block text-slate-300 mb-1">Print ISSN</label>
-              <input
-                type="text"
-                value={formData.issn}
-                onChange={e => setFormData({ ...formData, issn: e.target.value })}
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white font-mono"
-              />
-            </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
             <div>
               <label className="block text-slate-300 mb-1">Online e-ISSN</label>
               <input
                 type="text"
                 value={formData.eissn}
                 onChange={e => setFormData({ ...formData, eissn: e.target.value })}
+                placeholder="e-ISSN XXXX-XXXX"
                 className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white font-mono"
               />
             </div>

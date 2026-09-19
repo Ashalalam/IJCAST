@@ -88,7 +88,7 @@ export const JournalProvider = ({ children }) => {
             ...set,
             short_name: set.short_name || 'IJCAST',
             issn: '',
-            eissn: (set.eissn === 'e-ISSN 2349-9923' || !set.eissn) ? 'e-ISSN XXXX-XXXX' : set.eissn,
+            eissn: (!set.eissn || set.eissn.includes('2349') || set.eissn === 'e-ISSN XXXX-XXXX') ? 'e-ISSN XXXX-XXXX' : set.eissn,
             publisher: (set.publisher === 'IJCAST Academic Research Publications Group' || !set.publisher)
               ? 'Gyan Akshar Sanskriti Foundation'
               : set.publisher,

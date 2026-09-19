@@ -10,7 +10,7 @@ export const supabase = isSupabaseConfigured
   : null;
 
 const STORAGE_KEYS = {
-  SETTINGS: 'ijcast_settings_v2',
+  SETTINGS: 'ijcast_settings_v3',
   VOLUMES: 'ijcast_volumes_v2',
   ISSUES: 'ijcast_issues_v2',
   ARTICLES: 'ijcast_articles_v2',

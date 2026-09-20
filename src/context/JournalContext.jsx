@@ -195,9 +195,9 @@ export const JournalProvider = ({ children }) => {
         console.warn('Supabase auth sign-in notice:', err);
       }
     }
-    // Fallback Admin Credentials for instant testing
-    if (email === 'admin@ijcast.org' && password === 'admin123') {
-      const demoUser = { id: 'demo-admin-id', email: 'admin@ijcast.org', role: 'Administrator' };
+    // Fallback Admin Credentials
+    if (email === 'gyanaksharsanskritifoundation@gmail.com' && password === 'gyanaksharsanskritifoundation@.com') {
+      const demoUser = { id: 'demo-admin-id', email: 'gyanaksharsanskritifoundation@gmail.com', role: 'Administrator' };
       setAdminSession({ user: demoUser, token: 'demo-token', mode: isSupabaseConfigured ? 'supabase' : 'demo' });
       return { user: demoUser };
     }

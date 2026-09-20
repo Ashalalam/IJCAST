@@ -33,8 +33,8 @@ export const AdminLogin = () => {
   };
 
   const fillDemoCredentials = () => {
-    setEmail('admin@ijcast.org');
-    setPassword('admin123');
+    setEmail('gyanaksharsanskritifoundation@gmail.com');
+    setPassword('gyanaksharsanskritifoundation@.com');
   };
 
   return (
@@ -75,7 +75,7 @@ export const AdminLogin = () => {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="admin@ijcast.org"
+                placeholder="gyanaksharsanskritifoundation@gmail.com"
                 className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-9 pr-4 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-500"
               />
             </div>
@@ -105,14 +105,13 @@ export const AdminLogin = () => {
           </button>
         </form>
 
-        {/* Demo Mode Quick Login Banner */}
+        {/* Quick Login */}
         <div className="pt-4 border-t border-slate-800 text-center space-y-2">
-          <p className="text-[11px] text-slate-500">Development Demo Mode</p>
           <button
             onClick={fillDemoCredentials}
-            className="text-xs text-amber-400 hover:underline font-mono"
+            className="text-xs text-amber-400 hover:underline"
           >
-            Auto-fill Demo Credentials (admin@ijcast.org / admin123)
+            Auto-fill Admin Credentials
           </button>
         </div>
       </div>

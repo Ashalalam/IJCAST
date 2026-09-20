@@ -94,6 +94,10 @@ export const ThesisManager = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!form.pdf_url) {
+      alert('PDF is required — please upload a file or paste a URL.');
+      return;
+    }
     await saveThesis(editingId ? { ...form, id: editingId } : form);
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
@@ -265,7 +269,7 @@ export const ThesisManager = () => {
 
             {/* PDF Upload Section */}
             <div className="space-y-2">
-              <label className="block text-slate-300">Thesis PDF Document</label>
+              <label className="block text-slate-300">Thesis PDF Document <span className="text-rose-400 font-bold">*</span></label>
 
               {/* Mode toggle */}
               <div className="flex items-center gap-2">
@@ -297,6 +301,8 @@ export const ThesisManager = () => {
                       ? 'border-amber-400 bg-amber-500/10'
                       : uploadedFileName
                       ? 'border-emerald-500/50 bg-emerald-500/5'
+                      : !form.pdf_url
+                      ? 'border-rose-500/50 hover:border-rose-400 bg-slate-950'
                       : 'border-slate-700 hover:border-slate-500 bg-slate-950'
                   }`}
                   onClick={() => fileInputRef.current?.click()}

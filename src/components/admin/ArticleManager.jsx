@@ -34,7 +34,7 @@ export const ArticleManager = () => {
     doi: '',
     page_numbers: '1–10',
     references: '',
-    pdf_url: '/sample-paper.pdf',
+    pdf_url: '',
     html_content: '',
     is_published: true
   };
@@ -163,6 +163,11 @@ export const ArticleManager = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSaveError('');
+
+    if (!formData.pdf_url) {
+      setSaveError('PDF is required — please upload a PDF file or paste a PDF URL.');
+      return;
+    }
 
     const kwArray = typeof formData.keywords === 'string'
       ? formData.keywords.split(',').map(k => k.trim()).filter(Boolean)
@@ -555,11 +560,12 @@ export const ArticleManager = () => {
           </div>
 
           {/* Section 5: Page Numbers & PDF Upload / Replace (Drag & Drop / Browse / URL) */}
-          <div className="p-4 bg-slate-950 border border-slate-800 rounded-xl space-y-4">
+          <div className={`p-4 bg-slate-950 border rounded-xl space-y-4 ${!formData.pdf_url ? 'border-rose-500/50' : 'border-slate-800'}`}>
             <div className="flex items-center justify-between border-b border-slate-800 pb-2">
               <h4 className="text-xs font-bold text-amber-400 uppercase tracking-wider flex items-center space-x-2">
                 <FileText className="w-4 h-4" />
                 <span>Manuscript PDF Upload / Replace</span>
+                <span className="text-rose-400 font-bold">*</span>
               </h4>
 
               {/* Mode Selector */}

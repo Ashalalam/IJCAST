@@ -41,6 +41,15 @@ export const Home = () => {
               <span>Multidisciplinary Peer-Reviewed Research Journal</span>
             </div>
 
+            {/* IJCAST Logo */}
+            <div className="flex justify-center lg:justify-start">
+              <img
+                src="/ijcast-logo.png"
+                alt="IJCAST Logo"
+                className="w-28 h-28 sm:w-36 sm:h-36 rounded-full object-cover border-4 border-amber-500/40 shadow-2xl"
+              />
+            </div>
+
             <h1 className="text-3xl sm:text-5xl font-bold font-serif leading-tight tracking-tight text-white">
               {settings.journal_name}
             </h1>

@@ -52,9 +52,11 @@ export const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-8 py-3 flex items-center justify-between">
         {/* Brand Logo & Name */}
         <Link to="/" className="flex items-center space-x-3 group">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-amber-700 flex items-center justify-center text-slate-950 font-bold shadow-md group-hover:scale-105 transition-transform">
-            <BookOpen className="w-6 h-6" />
-          </div>
+          <img
+            src="/ijcast-logo.png"
+            alt="IJCAST Logo"
+            className="w-12 h-12 rounded-full object-cover shadow-md group-hover:scale-105 transition-transform border-2 border-amber-500/30"
+          />
           <div>
             <h1 className="text-lg font-bold font-serif tracking-tight text-white group-hover:text-amber-400 transition-colors leading-snug">
               {settings.short_name || 'IJCAST'}

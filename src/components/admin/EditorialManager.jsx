@@ -26,7 +26,7 @@ export const EditorialManager = () => {
 
   const initialForm = {
     name: '',
-    role: 'Editorial Board Member',
+    role: 'Associate Editors',
     designation: '',
     institution: '',
     department: '',
@@ -149,8 +149,9 @@ export const EditorialManager = () => {
                 className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white"
               >
                 <option value="Editor-in-Chief">Editor-in-Chief</option>
-                <option value="Associate Editor">Associate Editor</option>
-                <option value="Editorial Board Member">Editorial Board Member</option>
+                <option value="Managing Editor">Managing Editor</option>
+                <option value="Technical Advisory Board">Technical Advisory Board</option>
+                <option value="Associate Editors">Associate Editors</option>
               </select>
             </div>
           </div>

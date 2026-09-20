@@ -254,7 +254,7 @@ export const initialEditorialMembers = [
   {
     id: 'ed-2',
     name: 'Dr. Pooja R. Karn',
-    role: 'Associate Editor',
+    role: 'Managing Editor',
     designation: 'Managing Editor | Ph.D. Computer Science | Independent Researcher',
     institution: 'Independent Researcher',
     department: '',
@@ -271,7 +271,7 @@ export const initialEditorialMembers = [
   {
     id: 'ed-3',
     name: 'Dr. Gayatri Agnihotri',
-    role: 'Editorial Board Member',
+    role: 'Technical Advisory Board',
     designation: 'Ex-Professor, Electrical Engineering & Ex-Dean Academics',
     institution: 'Maulana Azad National Institute of Technology',
     department: 'Electrical Engineering',
@@ -287,7 +287,7 @@ export const initialEditorialMembers = [
   {
     id: 'ed-4',
     name: 'Air Vice Marshal Dr. Pramod Kumar Shrivastava',
-    role: 'Editorial Board Member',
+    role: 'Technical Advisory Board',
     designation: 'Ex-Air Force Officer | Ex-Vice-Chancellor, Madhyanchal Professional University',
     institution: 'Indian Air Force (Retired)',
     department: '',
@@ -303,7 +303,7 @@ export const initialEditorialMembers = [
   {
     id: 'ed-5',
     name: 'Dr. V.K. Sethi',
-    role: 'Editorial Board Member',
+    role: 'Technical Advisory Board',
     designation: 'Director-General, Research | Ex-Director, UIT-RGPV',
     institution: 'RKDF University',
     department: '',
@@ -319,7 +319,7 @@ export const initialEditorialMembers = [
   {
     id: 'ed-6',
     name: 'Dr. N.K. Tiwari',
-    role: 'Editorial Board Member',
+    role: 'Technical Advisory Board',
     designation: 'Vice-Chancellor',
     institution: 'Maharshi University',
     department: '',
@@ -335,7 +335,7 @@ export const initialEditorialMembers = [
   {
     id: 'ed-7',
     name: 'Dr. J.L. Rana',
-    role: 'Editorial Board Member',
+    role: 'Technical Advisory Board',
     designation: 'Ex-Professor, Computer Science',
     institution: 'Maulana Azad National Institute of Technology',
     department: 'Computer Science',
@@ -351,7 +351,7 @@ export const initialEditorialMembers = [
   {
     id: 'ed-8',
     name: 'Dr. P.K. Mishra',
-    role: 'Editorial Board Member',
+    role: 'Technical Advisory Board',
     designation: 'Ex-Professor',
     institution: 'Barkatullah University',
     department: 'CRIM',
@@ -367,7 +367,7 @@ export const initialEditorialMembers = [
   {
     id: 'ed-9',
     name: 'Dr. Shalini Kapoor',
-    role: 'Editorial Board Member',
+    role: 'Technical Advisory Board',
     designation: 'Medical Director, RKDF Medical College',
     institution: 'Sarvepalli Radhakrishnan University',
     department: 'RKDF Medical College, Hospital and Research Centre',
@@ -383,7 +383,7 @@ export const initialEditorialMembers = [
   {
     id: 'ed-10',
     name: 'Dr. Prakash Singh Bisen',
-    role: 'Editorial Board Member',
+    role: 'Technical Advisory Board',
     designation: 'Ex-Professor & Ex-Director',
     institution: 'Madhav Institute of Technology & Science',
     department: '',
@@ -400,7 +400,7 @@ export const initialEditorialMembers = [
   {
     id: 'ed-11',
     name: 'Dr. Akshay Sharma',
-    role: 'Associate Editor',
+    role: 'Associate Editors',
     designation: 'Professor, Mathematics',
     institution: 'Sarvepalli Radhakrishnan University',
     department: 'Mathematics',
@@ -416,7 +416,7 @@ export const initialEditorialMembers = [
   {
     id: 'ed-12',
     name: 'Dr. Gopal Panda',
-    role: 'Associate Editor',
+    role: 'Associate Editors',
     designation: 'Professor, Physics',
     institution: 'Sarvepalli Radhakrishnan University',
     department: 'Physics',
@@ -432,7 +432,7 @@ export const initialEditorialMembers = [
   {
     id: 'ed-13',
     name: 'Dr. Preeti Chincholkar',
-    role: 'Associate Editor',
+    role: 'Associate Editors',
     designation: 'Professor, Chemistry',
     institution: 'Madhyanchal Professional University',
     department: 'Chemistry',
@@ -448,7 +448,7 @@ export const initialEditorialMembers = [
   {
     id: 'ed-14',
     name: 'Dr. Brajendra Tiwari',
-    role: 'Associate Editor',
+    role: 'Associate Editors',
     designation: 'Professor, Mathematics',
     institution: 'RKDF University',
     department: 'Mathematics',
@@ -464,7 +464,7 @@ export const initialEditorialMembers = [
   {
     id: 'ed-15',
     name: 'Dr. Shailesh Raghuvanshi',
-    role: 'Associate Editor',
+    role: 'Associate Editors',
     designation: 'Professor, Physics',
     institution: 'Chirayu University',
     department: 'Physics',
@@ -480,7 +480,7 @@ export const initialEditorialMembers = [
   {
     id: 'ed-16',
     name: 'Dr. Vikrant Jain',
-    role: 'Associate Editor',
+    role: 'Associate Editors',
     designation: 'Professor, Chemistry',
     institution: 'Madhyanchal Professional University',
     department: 'Chemistry',
@@ -496,7 +496,7 @@ export const initialEditorialMembers = [
   {
     id: 'ed-17',
     name: 'Dr. Shyam Patkar',
-    role: 'Associate Editor',
+    role: 'Associate Editors',
     designation: 'Professor, Mathematics',
     institution: 'Bhabha University',
     department: 'Mathematics',
@@ -512,7 +512,7 @@ export const initialEditorialMembers = [
   {
     id: 'ed-18',
     name: 'Dr. Ghizal Ansari',
-    role: 'Associate Editor',
+    role: 'Associate Editors',
     designation: 'Professor, Physics',
     institution: 'Madhyanchal Professional University',
     department: 'Physics',
@@ -528,7 +528,7 @@ export const initialEditorialMembers = [
   {
     id: 'ed-19',
     name: 'Dr. Ruchi Upadhyay',
-    role: 'Associate Editor',
+    role: 'Associate Editors',
     designation: 'Professor, Chemistry',
     institution: 'SAM Global University',
     department: 'Chemistry',
@@ -544,7 +544,7 @@ export const initialEditorialMembers = [
   {
     id: 'ed-20',
     name: 'Dr. Stendra Thakur',
-    role: 'Associate Editor',
+    role: 'Associate Editors',
     designation: 'Professor, Management',
     institution: 'RKDF University',
     department: 'Management',
@@ -560,7 +560,7 @@ export const initialEditorialMembers = [
   {
     id: 'ed-21',
     name: 'Dr. Sushil Singh',
-    role: 'Associate Editor',
+    role: 'Associate Editors',
     designation: 'Professor, Management',
     institution: 'Sarvepalli Radhakrishnan University',
     department: 'Management',
@@ -576,7 +576,7 @@ export const initialEditorialMembers = [
   {
     id: 'ed-22',
     name: 'Mr. Narendra Nandanwar',
-    role: 'Associate Editor',
+    role: 'Associate Editors',
     designation: 'Founder & CEO, Prosintech',
     institution: 'Prosintech',
     department: '',
@@ -592,7 +592,7 @@ export const initialEditorialMembers = [
   {
     id: 'ed-23',
     name: 'Dr. Shruti Khare',
-    role: 'Associate Editor',
+    role: 'Associate Editors',
     designation: 'Professor, Communication Skill',
     institution: 'Radharaman Institute of Technology & Science',
     department: 'Communication Skill',
@@ -608,7 +608,7 @@ export const initialEditorialMembers = [
   {
     id: 'ed-24',
     name: 'Dr. Jaya Garg',
-    role: 'Associate Editor',
+    role: 'Associate Editors',
     designation: 'Professor, Communication Skill',
     institution: 'Oriental Institute of Science & Technology',
     department: 'Communication Skill',
@@ -624,7 +624,7 @@ export const initialEditorialMembers = [
   {
     id: 'ed-25',
     name: 'Dr. Shailesh Jain',
-    role: 'Associate Editor',
+    role: 'Associate Editors',
     designation: 'Professor, Pharmacy',
     institution: 'LNCT University',
     department: 'Pharmacy',
@@ -640,7 +640,7 @@ export const initialEditorialMembers = [
   {
     id: 'ed-26',
     name: 'Dr. Amit Dubey',
-    role: 'Associate Editor',
+    role: 'Associate Editors',
     designation: 'Professor, Pharmacy',
     institution: 'Bhabha University',
     department: 'Pharmacy',
@@ -656,7 +656,7 @@ export const initialEditorialMembers = [
   {
     id: 'ed-27',
     name: 'Dr. Ashwini Joshi',
-    role: 'Associate Editor',
+    role: 'Associate Editors',
     designation: 'Professor, Communication Skill',
     institution: 'RKDF University',
     department: 'Communication Skill',
@@ -672,7 +672,7 @@ export const initialEditorialMembers = [
   {
     id: 'ed-28',
     name: 'Dr. Sanjeev Shrivastava',
-    role: 'Associate Editor',
+    role: 'Associate Editors',
     designation: 'Professor, Agriculture Science',
     institution: 'Sarvepalli Radhakrishnan University',
     department: 'Agriculture Science',
@@ -688,7 +688,7 @@ export const initialEditorialMembers = [
   {
     id: 'ed-29',
     name: 'Dr. Deepak Bharti',
-    role: 'Associate Editor',
+    role: 'Associate Editors',
     designation: 'Professor, Biotechnology',
     institution: 'Sarvepalli Radhakrishnan University',
     department: 'Biotechnology',
@@ -704,7 +704,7 @@ export const initialEditorialMembers = [
   {
     id: 'ed-30',
     name: 'Dr. Priya Dubey',
-    role: 'Associate Editor',
+    role: 'Associate Editors',
     designation: 'Professor, Commerce',
     institution: 'SAGE University',
     department: 'Commerce',
@@ -720,7 +720,7 @@ export const initialEditorialMembers = [
   {
     id: 'ed-31',
     name: 'Dr. Alka Tiwari',
-    role: 'Associate Editor',
+    role: 'Associate Editors',
     designation: 'Professor, Hindi',
     institution: 'Sarvepalli Radhakrishnan University',
     department: 'Hindi',
@@ -736,7 +736,7 @@ export const initialEditorialMembers = [
   {
     id: 'ed-32',
     name: 'Dr. Rekha Pandey',
-    role: 'Associate Editor',
+    role: 'Associate Editors',
     designation: 'Professor, Hindi',
     institution: 'Madhyanchal Professional University',
     department: 'Hindi',
@@ -752,7 +752,7 @@ export const initialEditorialMembers = [
   {
     id: 'ed-33',
     name: 'Dr. Alka Awsthi',
-    role: 'Associate Editor',
+    role: 'Associate Editors',
     designation: 'Professor, Management',
     institution: 'IES University',
     department: 'Management',
@@ -768,7 +768,7 @@ export const initialEditorialMembers = [
   {
     id: 'ed-34',
     name: 'Dr. Devendra Dhote',
-    role: 'Associate Editor',
+    role: 'Associate Editors',
     designation: 'Professor, Homeopathy',
     institution: 'Sarvepalli Radhakrishnan University',
     department: 'RKDF Homeopathic College, Hospital & Research Centre',
@@ -784,7 +784,7 @@ export const initialEditorialMembers = [
   {
     id: 'ed-35',
     name: 'Dr. Rakesh Pandey',
-    role: 'Associate Editor',
+    role: 'Associate Editors',
     designation: 'Professor, Ayurveda',
     institution: 'Sarvepalli Radhakrishnan University',
     department: 'SRK College of Ayurveda, Hospital & Research Centre',
@@ -897,3 +897,4 @@ export const initialTheses = [
     created_at: '2024-12-01T00:00:00Z'
   }
 ];
+

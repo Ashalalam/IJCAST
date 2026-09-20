@@ -43,9 +43,9 @@ export const EditorialBoard = () => {
   const active = editorialMembers.filter(m => m.is_active).sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0));
 
   const editorInChief    = active.filter(m => m.role === 'Editor-in-Chief');
-  const managingEditor   = active.filter(m => m.role === 'Associate Editor' && m.sort_order === 2);
-  const advisoryBoard    = active.filter(m => m.role === 'Editorial Board Member');
-  const associateEditors = active.filter(m => m.role === 'Associate Editor' && m.sort_order !== 2);
+  const managingEditor   = active.filter(m => m.role === 'Managing Editor');
+  const advisoryBoard    = active.filter(m => m.role === 'Technical Advisory Board');
+  const associateEditors = active.filter(m => m.role === 'Associate Editors');
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-8 py-12 space-y-14">

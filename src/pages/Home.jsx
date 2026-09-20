@@ -278,7 +278,7 @@ export const Home = () => {
               <div key={mem.id} className="bg-slate-950 p-5 rounded-xl border border-slate-800 space-y-3">
                 <div className="flex items-center space-x-3">
                   <img
-                    src={mem.photo_url || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=400&auto=format&fit=crop'}
+                    src={mem.photo_url || '/gyan-akshar-logo.png'}
                     alt={mem.name}
                     className="w-12 h-12 rounded-full object-cover border-2 border-amber-500"
                   />

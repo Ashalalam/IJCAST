@@ -385,14 +385,28 @@ export const JournalProvider = ({ children }) => {
   const saveEditorialMember = async (memberData) => {
     if (isSupabaseConfigured && supabase) {
       const isNew = !memberData.id || memberData.id.startsWith('ed-');
+      // Never store base64 images in Supabase — too large, causes failures
+      const supabasePayload = {
+        ...memberData,
+        photo_url: memberData.photo_url?.startsWith('data:') ? '' : (memberData.photo_url || ''),
+      };
       if (isNew) {
-        const { id: _, ...rest } = memberData;
+        const { id: _, ...rest } = supabasePayload;
         const payload = { ...rest, sort_order: editorialMembers.length + 1 };
         const { data: inserted, error } = await supabase.from('editorial_members').insert(payload).select().single();
-        if (!error && inserted) { setEditorialMembers(prev => [...prev, inserted]); return; }
+        if (!error && inserted) {
+          // Keep the base64 photo in local state even though DB has empty string
+          const withPhoto = { ...inserted, photo_url: memberData.photo_url || '' };
+          setEditorialMembers(prev => [...prev, withPhoto]);
+          return;
+        }
       } else {
-        await supabase.from('editorial_members').update(memberData).eq('id', memberData.id);
-        setEditorialMembers(prev => prev.map(m => m.id === memberData.id ? { ...m, ...memberData } : m)); return;
+        const { error } = await supabase.from('editorial_members').update(supabasePayload).eq('id', memberData.id);
+        if (!error) {
+          setEditorialMembers(prev => prev.map(m => m.id === memberData.id ? { ...m, ...memberData } : m));
+          return;
+        }
+        console.error('Editorial member update error');
       }
     }
     // Offline fallback

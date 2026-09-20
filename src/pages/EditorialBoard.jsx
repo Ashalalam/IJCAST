@@ -42,7 +42,7 @@ export const EditorialBoard = () => {
             {editorInChief.map(mem => (
               <div key={mem.id} className="bg-white p-8 rounded-3xl border border-amber-200 shadow-md flex flex-col md:flex-row gap-8 items-start">
                 <img
-                  src={mem.photo_url || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=400&auto=format&fit=crop'}
+                  src={mem.photo_url || '/gyan-akshar-logo.png'}
                   alt={mem.name}
                   className="w-32 h-32 rounded-2xl object-cover border-4 border-amber-500 shadow-lg flex-shrink-0"
                 />
@@ -95,7 +95,7 @@ export const EditorialBoard = () => {
               <div key={mem.id} className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
                 <div className="flex items-center space-x-4">
                   <img
-                    src={mem.photo_url || 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=400&auto=format&fit=crop'}
+                    src={mem.photo_url || '/gyan-akshar-logo.png'}
                     alt={mem.name}
                     className="w-20 h-20 rounded-xl object-cover border-2 border-amber-500 flex-shrink-0"
                   />
@@ -134,7 +134,7 @@ export const EditorialBoard = () => {
               <div key={mem.id} className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-3">
                 <div className="flex items-center space-x-3">
                   <img
-                    src={mem.photo_url || 'https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=400&auto=format&fit=crop'}
+                    src={mem.photo_url || '/gyan-akshar-logo.png'}
                     alt={mem.name}
                     className="w-14 h-14 rounded-full object-cover border-2 border-slate-200"
                   />

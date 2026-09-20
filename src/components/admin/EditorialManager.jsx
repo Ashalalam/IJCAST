@@ -33,7 +33,7 @@ export const EditorialManager = () => {
     country: '',
     email: '',
     orcid: '',
-    photo_url: '',
+    photo_url: '/gyan-akshar-logo.png',
     bio: '',
     research_area: '',
     is_active: true
@@ -367,7 +367,7 @@ export const EditorialManager = () => {
                 <td className="p-4">
                   <div className="flex items-center space-x-3 font-bold text-white font-serif">
                     <img
-                      src={mem.photo_url || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=400&auto=format&fit=crop'}
+                      src={mem.photo_url || '/gyan-akshar-logo.png'}
                       alt={mem.name}
                       className="w-9 h-9 rounded-full object-cover border-2 border-amber-500 flex-shrink-0"
                     />

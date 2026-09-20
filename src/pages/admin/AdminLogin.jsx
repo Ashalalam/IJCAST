@@ -113,6 +113,17 @@ export const AdminLogin = () => {
           >
             Auto-fill Admin Credentials
           </button>
+          <div>
+            <p className="text-[11px] text-slate-500">
+              Forgot password?{' '}
+              <a
+                href="mailto:gyanaksharsanskritifoundation@gmail.com"
+                className="text-amber-400 hover:underline"
+              >
+                Contact Administrator
+              </a>
+            </p>
+          </div>
         </div>
       </div>
     </div>

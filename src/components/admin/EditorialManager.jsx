@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useJournal } from '../../context/JournalContext';
-import { Plus, Edit, Trash2, CheckCircle2, XCircle, Users, ArrowUp, ArrowDown } from 'lucide-react';
+import { Plus, Edit, Trash2, CheckCircle2, XCircle, Users, ArrowUp, ArrowDown, Upload, Image as ImageIcon, Link as LinkIcon, X } from 'lucide-react';
 
 export const EditorialManager = () => {
   const { editorialMembers, saveEditorialMember, deleteEditorialMember, toggleEditorialActive, reorderEditorialMembers } = useJournal();
@@ -40,14 +40,46 @@ export const EditorialManager = () => {
   };
 
   const [formData, setFormData] = useState(initialForm);
+  const [photoMode, setPhotoMode] = useState('upload'); // 'upload' | 'url'
+  const [photoDragActive, setPhotoDragActive] = useState(false);
+  const [uploadedPhotoName, setUploadedPhotoName] = useState('');
+  const photoInputRef = useRef(null);
+
+  const handlePhotoFile = (file) => {
+    if (!file) return;
+    const isImage = file.type.startsWith('image/') || file.name.match(/\.(jpg|jpeg|png|webp|gif)$/i);
+    if (!isImage) { alert('Please upload an image file (JPG, PNG, WEBP).'); return; }
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      setFormData(prev => ({ ...prev, photo_url: e.target.result }));
+      setUploadedPhotoName(file.name);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handlePhotoDrag = (e) => {
+    e.preventDefault(); e.stopPropagation();
+    if (e.type === 'dragenter' || e.type === 'dragover') setPhotoDragActive(true);
+    else if (e.type === 'dragleave') setPhotoDragActive(false);
+  };
+
+  const handlePhotoDrop = (e) => {
+    e.preventDefault(); e.stopPropagation();
+    setPhotoDragActive(false);
+    if (e.dataTransfer.files?.[0]) handlePhotoFile(e.dataTransfer.files[0]);
+  };
 
   const handleOpenNew = () => {
     setEditingMember('new');
     setFormData(initialForm);
+    setPhotoMode('upload');
+    setUploadedPhotoName('');
   };
 
   const handleEdit = (mem) => {
     setEditingMember(mem.id);
+    setPhotoMode(mem.photo_url && !mem.photo_url.startsWith('data:') ? 'url' : 'upload');
+    setUploadedPhotoName('');
     setFormData({
       name: mem.name,
       role: mem.role,
@@ -193,22 +225,74 @@ export const EditorialManager = () => {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-            <div>
-              <label className="block text-slate-300 mb-1">Photograph Image URL</label>
-              <input
-                type="text"
-                value={formData.photo_url}
-                onChange={e => setFormData({ ...formData, photo_url: e.target.value })}
-                placeholder="https://..."
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white"
-              />
+            <div className="space-y-2">
+              <label className="block text-slate-300">Profile Photo</label>
+
+              {/* Mode toggle */}
+              <div className="flex items-center gap-2">
+                <button type="button" onClick={() => setPhotoMode('upload')}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors ${photoMode === 'upload' ? 'bg-amber-500 text-slate-950' : 'bg-slate-800 text-slate-300 hover:bg-slate-700'}`}>
+                  <Upload className="w-3.5 h-3.5" /> Upload Image
+                </button>
+                <button type="button" onClick={() => setPhotoMode('url')}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors ${photoMode === 'url' ? 'bg-amber-500 text-slate-950' : 'bg-slate-800 text-slate-300 hover:bg-slate-700'}`}>
+                  <LinkIcon className="w-3.5 h-3.5" /> Paste URL
+                </button>
+              </div>
+
+              {/* Drag & drop zone */}
+              {photoMode === 'upload' && (
+                <div
+                  onDragEnter={handlePhotoDrag} onDragOver={handlePhotoDrag}
+                  onDragLeave={handlePhotoDrag} onDrop={handlePhotoDrop}
+                  onClick={() => photoInputRef.current?.click()}
+                  className={`rounded-xl border-2 border-dashed p-4 cursor-pointer transition-all ${
+                    photoDragActive ? 'border-amber-400 bg-amber-500/10'
+                    : (uploadedPhotoName || (formData.photo_url && formData.photo_url.startsWith('data:')))
+                    ? 'border-emerald-500/50 bg-emerald-500/5'
+                    : 'border-slate-700 hover:border-slate-500 bg-slate-950'
+                  }`}
+                >
+                  {(uploadedPhotoName || (formData.photo_url && formData.photo_url.startsWith('data:'))) ? (
+                    <div className="flex items-center gap-2">
+                      <img src={formData.photo_url} alt="preview" className="w-10 h-10 rounded-full object-cover border-2 border-amber-500 flex-shrink-0" />
+                      <div className="flex-1 min-w-0">
+                        <p className="text-xs text-emerald-400 font-semibold truncate">{uploadedPhotoName || 'Uploaded photo'}</p>
+                        <p className="text-[10px] text-slate-400">Click to change</p>
+                      </div>
+                      <button type="button"
+                        onClick={e => { e.stopPropagation(); setUploadedPhotoName(''); setFormData(prev => ({ ...prev, photo_url: '' })); }}
+                        className="p-0.5 rounded hover:bg-slate-700 text-slate-400">
+                        <X className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="text-center space-y-1.5">
+                      <div className="w-9 h-9 bg-amber-500/10 rounded-xl flex items-center justify-center mx-auto border border-amber-500/20">
+                        <ImageIcon className="w-4 h-4 text-amber-400" />
+                      </div>
+                      <p className="text-xs font-semibold text-white">Drag & drop photo here</p>
+                      <p className="text-[11px] text-slate-400">JPG, PNG, WEBP — or click to browse</p>
+                    </div>
+                  )}
+                  <input ref={photoInputRef} type="file" accept="image/*" className="hidden"
+                    onChange={e => e.target.files?.[0] && handlePhotoFile(e.target.files[0])} />
+                </div>
+              )}
+
+              {/* URL input */}
+              {photoMode === 'url' && (
+                <input type="url" value={formData.photo_url}
+                  onChange={e => setFormData({ ...formData, photo_url: e.target.value })}
+                  placeholder="https://example.com/photo.jpg"
+                  className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white font-mono text-xs"
+                />
+              )}
             </div>
 
             <div>
               <label className="block text-slate-300 mb-1">Research Area Domain</label>
-              <input
-                type="text"
-                value={formData.research_area}
+              <input type="text" value={formData.research_area}
                 onChange={e => setFormData({ ...formData, research_area: e.target.value })}
                 placeholder="Commerce & Management"
                 className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white"

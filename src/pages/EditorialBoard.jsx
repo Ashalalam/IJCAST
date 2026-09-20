@@ -2,7 +2,7 @@ import React from 'react';
 import { useJournal } from '../context/JournalContext';
 import { Users, Mail, Award } from 'lucide-react';
 
-const MemberCard = ({ mem, size = 'md', showNumber = null }) => {
+const MemberCard = ({ mem, size = 'md', showNumber = null, roleLabel = null, roleBadgeColor = 'bg-amber-50 text-amber-800' }) => {
   const imgSize = size === 'lg' ? 'w-28 h-28 rounded-2xl' : size === 'md' ? 'w-16 h-16 rounded-xl' : 'w-12 h-12 rounded-xl';
   return (
     <div className={`bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md hover:border-amber-300 transition-all p-5 flex items-start gap-4`}>
@@ -16,6 +16,9 @@ const MemberCard = ({ mem, size = 'md', showNumber = null }) => {
         onError={e => { e.target.src = '/gyan-akshar-logo.png'; }}
       />
       <div className="flex-1 min-w-0">
+        {roleLabel && (
+          <span className={`inline-block px-2 py-0.5 rounded text-[10px] font-bold mb-1 ${roleBadgeColor}`}>{roleLabel}</span>
+        )}
         <h3 className={`font-bold font-serif text-slate-900 ${size === 'lg' ? 'text-xl' : 'text-sm'} leading-snug`}>{mem.name}</h3>
         <p className={`text-slate-600 mt-0.5 ${size === 'lg' ? 'text-sm' : 'text-xs'}`}>{mem.designation}</p>
         <p className="text-xs text-slate-500 mt-0.5">{mem.institution}{mem.country ? `, ${mem.country}` : ''}</p>
@@ -120,7 +123,9 @@ export const EditorialBoard = () => {
           <SectionHeader title="Technical Advisory Board" />
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {advisoryBoard.map((mem, idx) => (
-              <MemberCard key={mem.id} mem={mem} size="sm" showNumber={idx + 1} />
+              <MemberCard key={mem.id} mem={mem} size="sm" showNumber={idx + 1}
+                roleLabel="Technical Advisory Board"
+                roleBadgeColor="bg-purple-50 text-purple-800" />
             ))}
           </div>
         </section>
@@ -132,7 +137,9 @@ export const EditorialBoard = () => {
           <SectionHeader title="Associate Editors" />
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {associateEditors.map((mem, idx) => (
-              <MemberCard key={mem.id} mem={mem} size="sm" showNumber={idx + 1} />
+              <MemberCard key={mem.id} mem={mem} size="sm" showNumber={idx + 1}
+                roleLabel="Associate Editor"
+                roleBadgeColor="bg-emerald-50 text-emerald-800" />
             ))}
           </div>
         </section>

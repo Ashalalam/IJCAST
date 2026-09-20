@@ -29,9 +29,8 @@ const MemberCard = ({ mem, size = 'md', showNumber = null }) => {
   );
 };
 
-const SectionHeader = ({ label, title }) => (
+const SectionHeader = ({ title }) => (
   <div className="border-b-2 border-amber-500 pb-3 mb-6">
-    <span className="text-xs uppercase font-bold text-amber-700 tracking-wider">{label}</span>
     <h2 className="text-2xl font-bold font-serif text-slate-900">{title}</h2>
   </div>
 );
@@ -63,7 +62,7 @@ export const EditorialBoard = () => {
       {/* 1. Editor-in-Chief */}
       {editorInChief.length > 0 && (
         <section>
-          <SectionHeader label="Journal Leadership" title="Editor-in-Chief" />
+          <SectionHeader title="Editor-in-Chief" />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {editorInChief.map(mem => (
               <div key={mem.id} className="bg-white rounded-3xl border-2 border-amber-300 shadow-lg p-8 flex flex-col sm:flex-row gap-6 items-start">
@@ -93,7 +92,7 @@ export const EditorialBoard = () => {
       {/* 2. Managing Editor */}
       {managingEditor.length > 0 && (
         <section>
-          <SectionHeader label="Editorial Operations" title="Managing Editor" />
+          <SectionHeader title="Managing Editor" />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {managingEditor.map(mem => (
               <div key={mem.id} className="bg-white rounded-3xl border-2 border-sky-200 shadow-lg p-8 flex flex-col sm:flex-row gap-6 items-start">
@@ -118,7 +117,7 @@ export const EditorialBoard = () => {
       {/* 3. Technical Advisory Board */}
       {advisoryBoard.length > 0 && (
         <section>
-          <SectionHeader label="Expert Advisory" title="Technical Advisory Board" />
+          <SectionHeader title="Technical Advisory Board" />
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {advisoryBoard.map((mem, idx) => (
               <MemberCard key={mem.id} mem={mem} size="sm" showNumber={idx + 1} />
@@ -130,7 +129,7 @@ export const EditorialBoard = () => {
       {/* 4. Associate Editors */}
       {associateEditors.length > 0 && (
         <section>
-          <SectionHeader label="Editorial Team" title="Associate Editors" />
+          <SectionHeader title="Associate Editors" />
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {associateEditors.map((mem, idx) => (
               <MemberCard key={mem.id} mem={mem} size="sm" showNumber={idx + 1} />

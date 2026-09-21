@@ -90,9 +90,31 @@ export const JournalProvider = ({ children }) => {
 
     const fetchSupabaseData = async () => {
       try {
-        const { data: set } = await supabase.from('journal_settings').select('*').maybeSingle();
+        // Fire ALL fetches in parallel simultaneously
+        const [
+          { data: set },
+          { data: vols },
+          { data: iss },
+          { data: arts, error: artsErr },
+          { data: eds },
+          { data: ras },
+          { data: pgs },
+          { data: med },
+          { data: ths }
+        ] = await Promise.all([
+          supabase.from('journal_settings').select('*').maybeSingle(),
+          supabase.from('volumes').select('*').order('year', { ascending: false }),
+          supabase.from('issues').select('*').order('sort_order', { ascending: true }),
+          supabase.from('articles').select('*').order('sort_order', { ascending: true }),
+          supabase.from('editorial_members').select('*').order('sort_order', { ascending: true }),
+          supabase.from('research_areas').select('*').order('sort_order', { ascending: true }),
+          supabase.from('page_content').select('*'),
+          supabase.from('media').select('*').order('uploaded_at', { ascending: false }),
+          supabase.from('theses').select('*').order('created_at', { ascending: false })
+        ]);
+
+        // Settings
         if (set) {
-          // Merge in correct canonical values in case they were saved incorrectly before
           const corrected = {
             ...set,
             short_name: set.short_name || 'IJCAST',
@@ -108,39 +130,25 @@ export const JournalProvider = ({ children }) => {
               : set.publication_frequency,
           };
           setSettings(corrected);
-          // Silently patch the DB row if it had stale values
-          if (corrected.publisher !== set.publisher || corrected.publication_frequency !== set.publication_frequency || corrected.eissn !== set.eissn || set.issn || corrected.contact_email !== set.contact_email || corrected.alternate_email !== set.alternate_email) {
-            await supabase.from('journal_settings').update({
-              issn: '',
-              eissn: corrected.eissn,
-              publisher: corrected.publisher,
+          if (corrected.publisher !== set.publisher || corrected.publication_frequency !== set.publication_frequency || corrected.eissn !== set.eissn || set.issn || corrected.contact_email !== set.contact_email) {
+            supabase.from('journal_settings').update({
+              issn: '', eissn: corrected.eissn, publisher: corrected.publisher,
               publication_frequency: corrected.publication_frequency,
-              contact_email: 'editor.ijcast.in@gmail.com',
-              alternate_email: '',
+              contact_email: 'editor.ijcast.in@gmail.com', alternate_email: '',
             }).eq('id', set.id);
           }
         }
 
-        const { data: vols } = await supabase.from('volumes').select('*').order('year', { ascending: false });
-        if (vols && vols.length > 0) {
-          setVolumes(vols);
-        } else {
-          setVolumes(initialVolumes);
-          const { id: _v, ...volRest } = initialVolumes[0] || {};
-          await supabase.from('volumes').insert(initialVolumes.map(({ id, ...r }) => r));
-        }
+        // Volumes
+        if (vols && vols.length > 0) setVolumes(vols);
+        else { setVolumes(initialVolumes); supabase.from('volumes').insert(initialVolumes.map(({ id, ...r }) => r)); }
 
-        const { data: iss } = await supabase.from('issues').select('*').order('sort_order', { ascending: true });
-        if (iss && iss.length > 0) {
-          setIssues(iss);
-        } else {
-          setIssues(initialIssues);
-        }
+        // Issues
+        if (iss && iss.length > 0) setIssues(iss);
+        else setIssues(initialIssues);
 
-        const { data: arts, error: artsErr } = await supabase.from('articles').select('*').order('sort_order', { ascending: true });
+        // Articles
         if (artsErr) {
-          console.warn('Articles fetch error:', artsErr.message);
-          // Fallback: use native fetch directly
           try {
             const res = await fetch(
               `${import.meta.env.VITE_SUPABASE_URL}/rest/v1/articles?select=*&order=sort_order.asc`,
@@ -149,39 +157,26 @@ export const JournalProvider = ({ children }) => {
             const fallbackArts = await res.json();
             if (Array.isArray(fallbackArts) && fallbackArts.length > 0) setArticles(normalizeArticles(fallbackArts));
           } catch (fe) { console.warn('Fallback fetch failed:', fe); }
-        } else if (arts && arts.length > 0) {
-          setArticles(normalizeArticles(arts));
-        }
+        } else if (arts && arts.length > 0) setArticles(normalizeArticles(arts));
 
-        const { data: eds } = await supabase.from('editorial_members').select('*').order('sort_order', { ascending: true });
-        if (eds && eds.length > 0) {
-          setEditorialMembers(eds);
-        } else {
-          setEditorialMembers(initialEditorialMembers);
-        }
-        const { data: ras } = await supabase.from('research_areas').select('*').order('sort_order', { ascending: true });
-        if (ras && ras.length > 0) {
-          setResearchAreas(normalizeResearchAreas(ras));
-        } else {
-          setResearchAreas(initialResearchAreas);
-        }
+        // Editorial Members
+        if (eds && eds.length > 0) setEditorialMembers(eds);
+        else setEditorialMembers(initialEditorialMembers);
 
-        const { data: pgs } = await supabase.from('page_content').select('*');
-        if (pgs && pgs.length > 0) {
-          setPageContents(pgs);
-        } else {
-          setPageContents(initialPageContent);
-        }
+        // Research Areas
+        if (ras && ras.length > 0) setResearchAreas(normalizeResearchAreas(ras));
+        else setResearchAreas(initialResearchAreas);
 
-        const { data: med } = await supabase.from('media').select('*').order('uploaded_at', { ascending: false });
-        if (med && med.length > 0) {
-          setMediaItems(med);
-        }
+        // Page Content
+        if (pgs && pgs.length > 0) setPageContents(pgs);
+        else setPageContents(initialPageContent);
 
-        const { data: ths } = await supabase.from('theses').select('*').order('created_at', { ascending: false });
-        if (ths && ths.length > 0) {
-          setTheses(ths.map(t => ({ ...t, guide_names: parseJsonField(t.guide_names), keywords: parseJsonField(t.keywords) })));
-        }
+        // Media
+        if (med && med.length > 0) setMediaItems(med);
+
+        // Theses
+        if (ths && ths.length > 0) setTheses(ths.map(t => ({ ...t, guide_names: parseJsonField(t.guide_names), keywords: parseJsonField(t.keywords) })));
+
       } catch (err) {
         console.warn('Supabase fetch error, maintaining local state:', err);
       } finally {

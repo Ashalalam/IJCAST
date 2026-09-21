@@ -74,6 +74,15 @@ export const JournalProvider = ({ children }) => {
      'ijcast_page_content', 'ijcast_page_content_v2'].forEach(key => {
       try { localStorage.removeItem(key); } catch {}
     });
+
+  // Fetch editorial members immediately and independently for fast load
+  if (isSupabaseConfigured && supabase) {
+    supabase.from('editorial_members').select('*').order('sort_order', { ascending: true })
+      .then(({ data: eds }) => {
+        if (eds && eds.length > 0) setEditorialMembers(eds);
+      })
+      .catch(() => {});
+  }
     if (!isSupabaseConfigured || !supabase) {
       setIsLoading(false);
       return;
@@ -89,6 +98,8 @@ export const JournalProvider = ({ children }) => {
             short_name: set.short_name || 'IJCAST',
             issn: '',
             eissn: (!set.eissn || set.eissn.includes('2349') || set.eissn === 'e-ISSN XXXX-XXXX') ? 'e-ISSN XXXX-XXXX' : set.eissn,
+            contact_email: (!set.contact_email || set.contact_email === 'editor@ijcast.org') ? 'editor@ijcast.in' : set.contact_email,
+            alternate_email: (!set.alternate_email || set.alternate_email === 'ijcast.journal@gmail.com') ? 'editor.ijcast.in@gmail.com' : set.alternate_email,
             publisher: (set.publisher === 'IJCAST Academic Research Publications Group' || !set.publisher)
               ? 'Gyan Akshar Sanskriti Foundation'
               : set.publisher,
@@ -146,7 +157,6 @@ export const JournalProvider = ({ children }) => {
         } else {
           setEditorialMembers(initialEditorialMembers);
         }
-
         const { data: ras } = await supabase.from('research_areas').select('*').order('sort_order', { ascending: true });
         if (ras && ras.length > 0) {
           setResearchAreas(normalizeResearchAreas(ras));
@@ -404,6 +414,9 @@ export const JournalProvider = ({ children }) => {
         const { error } = await supabase.from('editorial_members').update(supabasePayload).eq('id', memberData.id);
         if (!error) {
           setEditorialMembers(prev => prev.map(m => m.id === memberData.id ? { ...m, ...memberData } : m));
+          // Re-fetch all to ensure public site reflects changes
+          const { data: fresh } = await supabase.from('editorial_members').select('*').order('sort_order', { ascending: true });
+          if (fresh && fresh.length > 0) setEditorialMembers(fresh);
           return;
         }
         console.error('Editorial member update error');

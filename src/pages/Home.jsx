@@ -59,7 +59,13 @@ export const Home = () => {
             </p>
 
             {/* Badges Bar */}
-            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 text-xs pt-2">
+            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3 text-xs pt-2">
+              {/* Submission Always Open badge */}
+              <div className="flex items-center space-x-1.5 px-3.5 py-1.5 bg-slate-800 border border-slate-700 rounded-full font-semibold text-white">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse flex-shrink-0"></span>
+                <span>Submission: Always Open</span>
+              </div>
+
               {settings.eissn && (
                 <div className="px-3.5 py-1.5 bg-slate-900 border border-slate-800 rounded-xl text-slate-200 font-medium">
                   <span className="text-emerald-400 font-bold mr-1.5">{settings.eissn}</span>

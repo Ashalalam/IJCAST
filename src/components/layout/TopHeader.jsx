@@ -33,6 +33,11 @@ export const TopHeader = () => {
               <span>{settings.publication_frequency}</span>
             </span>
           )}
+          {/* Submission Always Open */}
+          <span className="hidden sm:flex items-center space-x-1.5 px-2.5 py-1 bg-slate-900 border border-emerald-800/50 rounded-full text-emerald-400 font-semibold">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span>Submission: Always Open</span>
+          </span>
         </div>
 
         {/* Global Search & Quick CTA */}

@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { useJournal } from '../../context/JournalContext';
-import { X, Mail, Copy, Check, Send, AlertCircle, FileText, CheckCircle2 } from 'lucide-react';
+import { X, Copy, Check, Send, AlertCircle, FileText, CheckCircle2 } from 'lucide-react';
 
 export const SubmitModal = () => {
   const { settings, isSubmitOpen, setIsSubmitOpen } = useJournal();
   const [copied, setCopied] = useState(false);
-  const [openedMail, setOpenedMail] = useState(false);
 
   if (!isSubmitOpen) return null;
 
@@ -13,22 +12,6 @@ export const SubmitModal = () => {
     navigator.clipboard.writeText(settings.contact_email);
     setCopied(true);
     setTimeout(() => setCopied(false), 2500);
-  };
-
-  const handleOpenMailApp = (e) => {
-    e.preventDefault();
-    // Copy email to clipboard automatically as a fallback guarantee
-    navigator.clipboard.writeText(settings.contact_email);
-    setCopied(true);
-    setOpenedMail(true);
-    
-    // Trigger mailto link
-    window.location.href = `mailto:${settings.contact_email}?subject=Manuscript Submission - IJCAST`;
-    
-    setTimeout(() => {
-      setCopied(false);
-      setOpenedMail(false);
-    }, 4000);
   };
 
   return (
@@ -122,23 +105,15 @@ export const SubmitModal = () => {
 
           {/* Direct Email Action Buttons */}
           <div className="pt-2 flex flex-col sm:flex-row gap-3">
-            <button
-              onClick={handleOpenMailApp}
-              className="flex-1 inline-flex items-center justify-center space-x-2 px-6 py-3 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-xl shadow-lg transition-all text-xs uppercase tracking-wider"
-            >
-              <Mail className="w-4 h-4" />
-              <span>Open Mail App to Submit</span>
-            </button>
-
             <a
               href={`https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(settings.contact_email)}&su=Manuscript%20Submission%20-%20IJCAST`}
               target="_blank"
               rel="noopener noreferrer"
               onClick={handleCopyEmail}
-              className="flex-1 inline-flex items-center justify-center space-x-2 px-6 py-3 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl shadow-lg transition-all text-xs uppercase tracking-wider"
+              className="flex-1 inline-flex items-center justify-center space-x-2 px-6 py-3 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-xl shadow-lg transition-all text-xs uppercase tracking-wider"
             >
-              <Send className="w-4 h-4 text-amber-400" />
-              <span>Open in Gmail Webmail</span>
+              <Send className="w-4 h-4" />
+              <span>Open in Gmail to Submit</span>
             </a>
 
             <button

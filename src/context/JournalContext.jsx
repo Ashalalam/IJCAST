@@ -397,28 +397,43 @@ export const JournalProvider = ({ children }) => {
   const saveEditorialMember = async (memberData) => {
     if (isSupabaseConfigured && supabase) {
       const isNew = !memberData.id || memberData.id.startsWith('ed-');
-      // Never store base64 images in Supabase — too large, causes failures
-      const supabasePayload = {
-        ...memberData,
-        photo_url: memberData.photo_url?.startsWith('data:') ? '' : (memberData.photo_url || ''),
-      };
+
+      // If photo is base64, upload to Supabase Storage first
+      let finalPhotoUrl = memberData.photo_url || '';
+      if (memberData.photo_url?.startsWith('data:')) {
+        try {
+          // Convert base64 to blob
+          const res = await fetch(memberData.photo_url);
+          const blob = await res.blob();
+          const ext = blob.type.includes('png') ? 'png' : 'jpg';
+          const fileName = `editorial/${Date.now()}.${ext}`;
+          const { data: uploaded, error: uploadErr } = await supabase.storage
+            .from('journal-images')
+            .upload(fileName, blob, { contentType: blob.type, upsert: true });
+          if (!uploadErr && uploaded) {
+            const { data: { publicUrl } } = supabase.storage.from('journal-images').getPublicUrl(fileName);
+            finalPhotoUrl = publicUrl;
+          }
+        } catch (uploadEx) {
+          console.warn('Photo upload failed, saving without photo:', uploadEx);
+          finalPhotoUrl = '';
+        }
+      }
+
+      const supabasePayload = { ...memberData, photo_url: finalPhotoUrl };
+
       if (isNew) {
         const { id: _, ...rest } = supabasePayload;
         const payload = { ...rest, sort_order: editorialMembers.length + 1 };
         const { data: inserted, error } = await supabase.from('editorial_members').insert(payload).select().single();
         if (!error && inserted) {
-          // Keep the base64 photo in local state even though DB has empty string
-          const withPhoto = { ...inserted, photo_url: memberData.photo_url || '' };
-          setEditorialMembers(prev => [...prev, withPhoto]);
+          setEditorialMembers(prev => [...prev, { ...inserted, photo_url: finalPhotoUrl || memberData.photo_url || '' }]);
           return;
         }
       } else {
         const { error } = await supabase.from('editorial_members').update(supabasePayload).eq('id', memberData.id);
         if (!error) {
-          setEditorialMembers(prev => prev.map(m => m.id === memberData.id ? { ...m, ...memberData } : m));
-          // Re-fetch all to ensure public site reflects changes
-          const { data: fresh } = await supabase.from('editorial_members').select('*').order('sort_order', { ascending: true });
-          if (fresh && fresh.length > 0) setEditorialMembers(fresh);
+          setEditorialMembers(prev => prev.map(m => m.id === memberData.id ? { ...m, ...memberData, photo_url: finalPhotoUrl || memberData.photo_url || '' } : m));
           return;
         }
         console.error('Editorial member update error');

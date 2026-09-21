@@ -8,15 +8,21 @@ export const SubmitModal = () => {
 
   if (!isSubmitOpen) return null;
 
+  // Safe fallback so nothing crashes if settings haven't loaded yet
+  const contactEmail = settings?.contact_email || 'editor.ijcast.in@gmail.com';
+
   const handleCopyEmail = () => {
-    navigator.clipboard.writeText(settings.contact_email);
+    try { navigator.clipboard.writeText(contactEmail); } catch {}
     setCopied(true);
     setTimeout(() => setCopied(false), 2500);
   };
 
+  const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(contactEmail)}&su=Manuscript%20Submission%20-%20IJCAST`;
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/80 backdrop-blur-sm p-4 overflow-y-auto">
       <div className="bg-white w-full max-w-2xl rounded-2xl shadow-2xl border border-slate-100 overflow-hidden transform transition-all">
+
         {/* Header */}
         <div className="bg-slate-900 text-white p-6 relative">
           <div className="flex items-center space-x-3">
@@ -37,36 +43,24 @@ export const SubmitModal = () => {
         </div>
 
         {/* Content */}
-        <div className="p-6 space-y-6 max-h-[80vh] overflow-y-auto custom-scrollbar">
+        <div className="p-6 space-y-6 max-h-[80vh] overflow-y-auto">
+
           {/* Email Banner */}
           <div className="bg-amber-50 border border-amber-200 rounded-xl p-5 text-amber-900">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div>
                 <span className="text-xs uppercase tracking-wider font-semibold text-amber-800">Official Journal Email</span>
-                <p className="text-2xl font-bold text-slate-900 mt-1 font-mono select-all">{settings.contact_email}</p>
-                {settings.alternate_email && (
-                  <p className="text-xs text-slate-600 mt-1">
-                    Secondary: <span className="font-mono font-medium">{settings.alternate_email}</span>
-                  </p>
-                )}
+                <p className="text-xl font-bold text-slate-900 mt-1 font-mono select-all break-all">{contactEmail}</p>
               </div>
               <button
                 onClick={handleCopyEmail}
                 className="flex items-center space-x-1.5 px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white text-sm font-medium rounded-lg shadow-sm transition-colors flex-shrink-0"
               >
                 {copied ? <Check className="w-4 h-4 text-emerald-300" /> : <Copy className="w-4 h-4" />}
-                <span>{copied ? 'Copied Email!' : 'Copy Email Address'}</span>
+                <span>{copied ? 'Copied!' : 'Copy Email'}</span>
               </button>
             </div>
           </div>
-
-          {/* Toast / Notification when clicking mail trigger */}
-          {openedMail && (
-            <div className="p-3 bg-emerald-50 border border-emerald-200 text-emerald-900 text-xs font-semibold rounded-xl flex items-center space-x-2">
-              <Check className="w-4 h-4 text-emerald-600 flex-shrink-0" />
-              <span>Email address copied to clipboard ({settings.contact_email}). Opening your default email client...</span>
-            </div>
-          )}
 
           {/* Submission Notice */}
           <div className="flex items-start space-x-3 p-4 bg-slate-50 border border-slate-200 rounded-xl">
@@ -77,36 +71,31 @@ export const SubmitModal = () => {
             </div>
           </div>
 
-          {/* Guidelines Checklist */}
+          {/* Checklist */}
           <div>
             <h4 className="text-sm font-bold text-slate-900 mb-3 flex items-center space-x-2">
               <FileText className="w-4 h-4 text-amber-600" />
               <span>Submission Requirements Checklist:</span>
             </h4>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs text-slate-600">
-              <div className="flex items-center space-x-2 p-2 bg-white border border-slate-100 rounded-lg">
-                <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                <span>Title Page with Author Affiliations & ORCID</span>
-              </div>
-              <div className="flex items-center space-x-2 p-2 bg-white border border-slate-100 rounded-lg">
-                <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                <span>Structured Abstract (150–250 words)</span>
-              </div>
-              <div className="flex items-center space-x-2 p-2 bg-white border border-slate-100 rounded-lg">
-                <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                <span>4 to 6 Keywords</span>
-              </div>
-              <div className="flex items-center space-x-2 p-2 bg-white border border-slate-100 rounded-lg">
-                <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                <span>Single/Double-line Spaced Word Doc</span>
-              </div>
+              {[
+                'Title Page with Author Affiliations & ORCID',
+                'Structured Abstract (150–250 words)',
+                '4 to 6 Keywords',
+                'Single/Double-line Spaced Word Doc',
+              ].map((item, i) => (
+                <div key={i} className="flex items-center space-x-2 p-2 bg-white border border-slate-100 rounded-lg">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0" />
+                  <span>{item}</span>
+                </div>
+              ))}
             </div>
           </div>
 
-          {/* Direct Email Action Buttons */}
+          {/* Action Buttons */}
           <div className="pt-2 flex flex-col sm:flex-row gap-3">
             <a
-              href={`https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(settings.contact_email)}&su=Manuscript%20Submission%20-%20IJCAST`}
+              href={gmailUrl}
               target="_blank"
               rel="noopener noreferrer"
               onClick={handleCopyEmail}

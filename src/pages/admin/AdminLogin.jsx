@@ -117,7 +117,7 @@ export const AdminLogin = () => {
             <p className="text-[11px] text-slate-500">
               Forgot password?{' '}
               <a
-                href="mailto:gyanaksharsanskritifoundation@gmail.com"
+                href="mailto:editor@ijcast.in"
                 className="text-amber-400 hover:underline"
               >
                 Contact Administrator

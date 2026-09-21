@@ -34,8 +34,8 @@ export const TopHeader = () => {
             </span>
           )}
           {/* Submission Always Open */}
-          <span className="hidden sm:flex items-center space-x-1.5 px-2.5 py-1 bg-slate-900 border border-emerald-800/50 rounded-full text-emerald-400 font-semibold">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span className="hidden sm:flex items-center space-x-2 px-3 py-1.5 bg-emerald-500 rounded-full text-slate-950 font-bold shadow-md shadow-emerald-500/40">
+            <span className="w-2 h-2 rounded-full bg-white animate-pulse flex-shrink-0"></span>
             <span>Submission: Always Open</span>
           </span>
         </div>

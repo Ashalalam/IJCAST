@@ -61,8 +61,8 @@ export const Home = () => {
             {/* Badges Bar */}
             <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3 text-xs pt-2">
               {/* Submission Always Open badge */}
-              <div className="flex items-center space-x-2 px-4 py-2 bg-emerald-500 rounded-full font-bold text-slate-950 shadow-lg shadow-emerald-500/30">
-                <span className="w-2.5 h-2.5 rounded-full bg-white animate-pulse flex-shrink-0"></span>
+              <div className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-amber-500 to-amber-600 rounded-xl font-bold text-slate-950 shadow-lg shadow-amber-500/30">
+                <span className="w-2.5 h-2.5 rounded-full bg-slate-950/40 animate-pulse flex-shrink-0"></span>
                 <span className="text-sm">Submission: Always Open</span>
               </div>
 

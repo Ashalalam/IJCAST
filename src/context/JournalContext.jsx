@@ -98,8 +98,8 @@ export const JournalProvider = ({ children }) => {
             short_name: set.short_name || 'IJCAST',
             issn: '',
             eissn: (!set.eissn || set.eissn.includes('2349') || set.eissn === 'e-ISSN XXXX-XXXX') ? 'e-ISSN XXXX-XXXX' : set.eissn,
-            contact_email: (!set.contact_email || set.contact_email === 'editor@ijcast.org' || set.contact_email === 'editor.ijcast@gmail.com') ? 'editor@ijcast.in' : set.contact_email,
-            alternate_email: (!set.alternate_email || set.alternate_email === 'ijcast.journal@gmail.com' || set.alternate_email === 'editor@ijcast.org') ? 'editor.ijcast.in@gmail.com' : set.alternate_email,
+            contact_email: (!set.contact_email || set.contact_email === 'editor@ijcast.org' || set.contact_email === 'editor.ijcast@gmail.com' || set.contact_email === 'editor@ijcast.in') ? 'editor.ijcast.in@gmail.com' : set.contact_email,
+            alternate_email: '',
             publisher: (set.publisher === 'IJCAST Academic Research Publications Group' || !set.publisher)
               ? 'Gyan Akshar Sanskriti Foundation'
               : set.publisher,
@@ -115,8 +115,8 @@ export const JournalProvider = ({ children }) => {
               eissn: corrected.eissn,
               publisher: corrected.publisher,
               publication_frequency: corrected.publication_frequency,
-              contact_email: corrected.contact_email,
-              alternate_email: corrected.alternate_email,
+              contact_email: 'editor.ijcast.in@gmail.com',
+              alternate_email: '',
             }).eq('id', set.id);
           }
         }

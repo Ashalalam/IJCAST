@@ -13,10 +13,15 @@ import { MediaManager } from '../../components/admin/MediaManager';
 import { SettingsManager } from '../../components/admin/SettingsManager';
 import { ThesisManager } from '../../components/admin/ThesisManager';
 
-import { FolderTree, BookMarked, FileText, Users, Plus, ArrowRight, Eye, ShieldCheck, Menu, RefreshCw, CloudUpload } from 'lucide-react';
+import { FolderTree, BookMarked, FileText, Users, Plus, ArrowRight, ShieldCheck, Menu, RefreshCw, CloudUpload } from 'lucide-react';
+
+// Skeleton pulse block
+const Sk = ({ w = 'w-16', h = 'h-8' }) => (
+  <div className={`${w} ${h} bg-slate-700/60 rounded animate-pulse`} />
+);
 
 export const AdminDashboard = () => {
-  const { adminSession, volumes, issues, articles, editorialMembers, syncArticlesToSupabase } = useJournal();
+  const { adminSession, volumes, issues, articles, editorialMembers, syncArticlesToSupabase, isLoading } = useJournal();
   const [activeTab, setActiveTab] = useState('dashboard');
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [syncing, setSyncing] = useState(false);
@@ -124,8 +129,8 @@ export const AdminDashboard = () => {
                   <span className="text-xs font-semibold uppercase">Total Volumes</span>
                   <FolderTree className="w-5 h-5 text-amber-500" />
                 </div>
-                <p className="text-3xl font-bold text-white font-serif">{volumes.length}</p>
-                <p className="text-[11px] text-slate-500">{volumes.filter(v => v.status === 'Active').length} Active Volumes</p>
+                {isLoading ? <Sk w="w-12" h="h-9" /> : <p className="text-3xl font-bold text-white font-serif">{volumes.length}</p>}
+                {isLoading ? <Sk w="w-24" h="h-3" /> : <p className="text-[11px] text-slate-500">{volumes.filter(v => v.status === 'Active').length} Active Volumes</p>}
               </div>
 
               <div className="bg-slate-900 border border-slate-800 p-5 rounded-2xl space-y-2">
@@ -133,8 +138,8 @@ export const AdminDashboard = () => {
                   <span className="text-xs font-semibold uppercase">Total Issues</span>
                   <BookMarked className="w-5 h-5 text-amber-500" />
                 </div>
-                <p className="text-3xl font-bold text-white font-serif">{issues.length}</p>
-                <p className="text-[11px] text-slate-500">Across all years</p>
+                {isLoading ? <Sk w="w-12" h="h-9" /> : <p className="text-3xl font-bold text-white font-serif">{issues.length}</p>}
+                {isLoading ? <Sk w="w-24" h="h-3" /> : <p className="text-[11px] text-slate-500">Across all years</p>}
               </div>
 
               <div className="bg-slate-900 border border-slate-800 p-5 rounded-2xl space-y-2">
@@ -142,8 +147,8 @@ export const AdminDashboard = () => {
                   <span className="text-xs font-semibold uppercase">Total Articles</span>
                   <FileText className="w-5 h-5 text-amber-500" />
                 </div>
-                <p className="text-3xl font-bold text-white font-serif">{articles.length}</p>
-                <p className="text-[11px] text-emerald-400 font-medium">{publishedArticles.length} Published</p>
+                {isLoading ? <Sk w="w-12" h="h-9" /> : <p className="text-3xl font-bold text-white font-serif">{articles.length}</p>}
+                {isLoading ? <Sk w="w-24" h="h-3" /> : <p className="text-[11px] text-emerald-400 font-medium">{publishedArticles.length} Published</p>}
               </div>
 
               <div className="bg-slate-900 border border-slate-800 p-5 rounded-2xl space-y-2">
@@ -151,8 +156,8 @@ export const AdminDashboard = () => {
                   <span className="text-xs font-semibold uppercase">Board Members</span>
                   <Users className="w-5 h-5 text-amber-500" />
                 </div>
-                <p className="text-3xl font-bold text-white font-serif">{editorialMembers.length}</p>
-                <p className="text-[11px] text-slate-500">{editorialMembers.filter(m => m.is_active).length} Active Members</p>
+                {isLoading ? <Sk w="w-12" h="h-9" /> : <p className="text-3xl font-bold text-white font-serif">{editorialMembers.length}</p>}
+                {isLoading ? <Sk w="w-24" h="h-3" /> : <p className="text-[11px] text-slate-500">{editorialMembers.filter(m => m.is_active).length} Active Members</p>}
               </div>
             </div>
 
@@ -170,7 +175,15 @@ export const AdminDashboard = () => {
               </div>
 
               <div className="space-y-3">
-                {latestArticlesList.map(art => (
+                {isLoading ? (
+                  [1,2,3].map(i => (
+                    <div key={i} className="p-4 bg-slate-950 border border-slate-800/80 rounded-xl space-y-2">
+                      <div className="flex gap-2"><Sk w="w-24" h="h-4" /><Sk w="w-16" h="h-4" /></div>
+                      <Sk w="w-3/4" h="h-4" />
+                      <Sk w="w-1/2" h="h-3" />
+                    </div>
+                  ))
+                ) : latestArticlesList.map(art => (
                   <div key={art.id} className="p-4 bg-slate-950 border border-slate-800/80 rounded-xl flex items-center justify-between gap-4">
                     <div className="space-y-1 truncate">
                       <div className="flex items-center space-x-2 text-[10px]">

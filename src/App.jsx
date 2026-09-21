@@ -9,6 +9,7 @@ import { Footer } from './components/layout/Footer';
 import { SubmitModal } from './components/common/SubmitModal';
 import { PDFViewerModal } from './components/common/PDFViewerModal';
 import { SearchModal } from './components/common/SearchModal';
+import { NewsflashBanner } from './components/common/NewsflashBanner';
 
 import { Home } from './pages/Home';
 import { About } from './pages/About';
@@ -36,6 +37,7 @@ const PublicLayout = ({ children }) => (
   <div className="min-h-screen flex flex-col bg-slate-50 font-sans text-slate-800 selection:bg-amber-100 selection:text-amber-900">
     <TopHeader />
     <Navbar />
+    <NewsflashBanner />
     <main className="flex-grow">
       {children}
     </main>

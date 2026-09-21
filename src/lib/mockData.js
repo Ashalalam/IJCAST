@@ -898,3 +898,18 @@ export const initialTheses = [
   }
 ];
 
+
+// ========================================================
+// ANNOUNCEMENTS / NEWSFLASH DATA
+// ========================================================
+export const initialAnnouncements = [
+  {
+    id: 'ann-1',
+    title: 'Call for Papers',
+    message: 'Volume 1, Issue 3 (July–September 2026) is now open for submissions. Submit your manuscript to editor.ijcast.in@gmail.com',
+    type: 'call_for_papers',
+    expires_at: '2026-06-30',
+    is_active: true,
+    created_at: new Date().toISOString()
+  }
+];

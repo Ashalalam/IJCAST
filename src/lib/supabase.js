@@ -19,7 +19,8 @@ const STORAGE_KEYS = {
   PAGE_CONTENT: 'ijcast_page_content_v2',
   MEDIA: 'ijcast_media_v2',
   ADMIN_SESSION: 'ijcast_admin_session',
-  THESES: 'ijcast_theses_v2'
+  THESES: 'ijcast_theses_v2',
+  ANNOUNCEMENTS: 'ijcast_announcements'
 };
 
 // Helper for LocalStorage Persistence

@@ -177,3 +177,22 @@ CREATE POLICY "Public Read Theses" ON theses FOR SELECT USING (is_published = tr
 
 -- Authenticated users (admins) can do all operations
 CREATE POLICY "Admin All Theses" ON theses FOR ALL USING (auth.role() = 'authenticated') WITH CHECK (auth.role() = 'authenticated');
+
+-- 10. ANNOUNCEMENTS TABLE (Newsflash banner on home page)
+CREATE TABLE IF NOT EXISTS announcements (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  title TEXT NOT NULL,
+  message TEXT,
+  type TEXT DEFAULT 'general' CHECK (type IN ('call_for_papers', 'new_issue', 'indexing', 'general')),
+  expires_at DATE,
+  is_active BOOLEAN DEFAULT true,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+ALTER TABLE announcements ENABLE ROW LEVEL SECURITY;
+
+-- Anyone can read active announcements
+CREATE POLICY "Public Read Announcements" ON announcements FOR SELECT USING (true);
+
+-- Anon key can do all operations (app-level auth)
+CREATE POLICY "Allow All Announcements" ON announcements FOR ALL USING (true) WITH CHECK (true);

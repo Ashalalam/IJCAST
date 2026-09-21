@@ -9,7 +9,8 @@ import {
   initialEditorialMembers,
   initialPageContent,
   initialMedia,
-  initialTheses
+  initialTheses,
+  initialAnnouncements
 } from '../lib/mockData';
 
 const JournalContext = createContext(null);
@@ -53,6 +54,7 @@ export const JournalProvider = ({ children }) => {
   const [mediaItems, setMediaItems] = useState(() => getLocalStore(STORAGE_KEYS.MEDIA, []));
   const [adminSession, setAdminSession] = useState(() => getLocalStore(STORAGE_KEYS.ADMIN_SESSION, null));
   const [theses, setTheses] = useState(() => getLocalStore(STORAGE_KEYS.THESES, []));
+  const [announcements, setAnnouncements] = useState(() => getLocalStore(STORAGE_KEYS.ANNOUNCEMENTS, initialAnnouncements));
   const [isLoading, setIsLoading] = useState(true);
 
   // Global Modal States
@@ -64,6 +66,7 @@ export const JournalProvider = ({ children }) => {
   useEffect(() => { setLocalStore(STORAGE_KEYS.SETTINGS, settings); }, [settings]);
   useEffect(() => { setLocalStore(STORAGE_KEYS.ADMIN_SESSION, adminSession); }, [adminSession]);
   useEffect(() => { setLocalStore(STORAGE_KEYS.RESEARCH_AREAS, researchAreas); }, [researchAreas]);
+  useEffect(() => { setLocalStore(STORAGE_KEYS.ANNOUNCEMENTS, announcements); }, [announcements]);
 
   // Load from Supabase if configured
   useEffect(() => {
@@ -100,7 +103,8 @@ export const JournalProvider = ({ children }) => {
           { data: ras },
           { data: pgs },
           { data: med },
-          { data: ths }
+          { data: ths },
+          { data: anns }
         ] = await Promise.all([
           supabase.from('journal_settings').select('*').maybeSingle(),
           supabase.from('volumes').select('*').order('year', { ascending: false }),
@@ -110,7 +114,8 @@ export const JournalProvider = ({ children }) => {
           supabase.from('research_areas').select('*').order('sort_order', { ascending: true }),
           supabase.from('page_content').select('*'),
           supabase.from('media').select('*').order('uploaded_at', { ascending: false }),
-          supabase.from('theses').select('*').order('created_at', { ascending: false })
+          supabase.from('theses').select('*').order('created_at', { ascending: false }),
+          supabase.from('announcements').select('*').order('created_at', { ascending: false })
         ]);
 
         // Settings
@@ -176,6 +181,10 @@ export const JournalProvider = ({ children }) => {
 
         // Theses
         if (ths && ths.length > 0) setTheses(ths.map(t => ({ ...t, guide_names: parseJsonField(t.guide_names), keywords: parseJsonField(t.keywords) })));
+
+        // Announcements
+        if (anns && anns.length > 0) setAnnouncements(anns);
+        else setAnnouncements(initialAnnouncements);
 
       } catch (err) {
         console.warn('Supabase fetch error, maintaining local state:', err);
@@ -616,6 +625,38 @@ export const JournalProvider = ({ children }) => {
     }
   };
 
+  // Announcements CRUD
+  const saveAnnouncement = async (data) => {
+    const isNew = !data.id || data.id.startsWith('ann-');
+    if (isSupabaseConfigured && supabase) {
+      if (isNew) {
+        const { id: _, ...rest } = data;
+        const { data: inserted, error } = await supabase.from('announcements').insert({ ...rest, created_at: new Date().toISOString() }).select().single();
+        if (!error && inserted) { setAnnouncements(prev => [inserted, ...prev]); return; }
+      } else {
+        await supabase.from('announcements').update(data).eq('id', data.id);
+        setAnnouncements(prev => prev.map(a => a.id === data.id ? { ...a, ...data } : a)); return;
+      }
+    }
+    if (isNew) {
+      setAnnouncements(prev => [{ ...data, id: `ann-${Date.now()}`, created_at: new Date().toISOString() }, ...prev]);
+    } else {
+      setAnnouncements(prev => prev.map(a => a.id === data.id ? { ...a, ...data } : a));
+    }
+  };
+
+  const deleteAnnouncement = async (id) => {
+    setAnnouncements(prev => prev.filter(a => a.id !== id));
+    if (isSupabaseConfigured && supabase) await supabase.from('announcements').delete().eq('id', id);
+  };
+
+  const toggleAnnouncement = async (id) => {
+    const updated = announcements.map(a => a.id === id ? { ...a, is_active: !a.is_active } : a);
+    setAnnouncements(updated);
+    const target = updated.find(a => a.id === id);
+    if (isSupabaseConfigured && supabase && target) await supabase.from('announcements').update({ is_active: target.is_active }).eq('id', id);
+  };
+
   const value = {
     settings,
     updateSettings,
@@ -659,7 +700,11 @@ export const JournalProvider = ({ children }) => {
     setIsSubmitOpen,
     pdfModalData,
     setPdfModalData,
-    isLoading
+    isLoading,
+    announcements,
+    saveAnnouncement,
+    deleteAnnouncement,
+    toggleAnnouncement
   };
 
   return (

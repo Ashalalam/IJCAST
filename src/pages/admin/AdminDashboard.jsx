@@ -12,6 +12,7 @@ import { PageContentEditor } from '../../components/admin/PageContentEditor';
 import { MediaManager } from '../../components/admin/MediaManager';
 import { SettingsManager } from '../../components/admin/SettingsManager';
 import { ThesisManager } from '../../components/admin/ThesisManager';
+import { AnnouncementManager } from '../../components/admin/AnnouncementManager';
 
 import { FolderTree, BookMarked, FileText, Users, Plus, ArrowRight, ShieldCheck, Menu, RefreshCw, CloudUpload } from 'lucide-react';
 
@@ -251,6 +252,9 @@ export const AdminDashboard = () => {
 
         {/* Tab 4b: Theses */}
         {activeTab === 'theses' && <ThesisManager />}
+
+        {/* Tab 4c: Announcements */}
+        {activeTab === 'announcements' && <AnnouncementManager />}
 
         {/* Tab 5: Editorial Board */}
         {activeTab === 'editorial' && <EditorialManager />}

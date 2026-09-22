@@ -179,7 +179,7 @@ export const ForAuthors = () => {
       </section>
 
       {/* Bottom CTA Card */}
-      <div className="bg-slate-900 text-white p-8 rounded-3xl border border-slate-800 shadow-xl flex flex-col sm:flex-row items-center justify-between gap-6">
+      <div id="submit-now" className="bg-slate-900 text-white p-8 rounded-3xl border border-slate-800 shadow-xl flex flex-col sm:flex-row items-center justify-between gap-6">
         <div>
           <h3 className="text-xl font-bold font-serif">Ready to Submit Your Manuscript?</h3>
           <p className="text-xs text-slate-300 mt-1">Send your manuscript attachment directly to the official journal email address.</p>

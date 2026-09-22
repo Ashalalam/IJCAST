@@ -32,7 +32,7 @@ export const Navbar = () => {
       hasDropdown: true,
       subItems: [
         { name: 'Author Guidelines', path: '/for-authors#guidelines' },
-        { name: 'Manuscript Submission', path: '/for-authors#submission' },
+        { name: 'Manuscript Submission', path: '/for-authors#submit-now' },
         { name: 'Submission Process Workflow', path: '/for-authors#workflow' },
         { name: 'Publication Charges (APC)', path: '/apc' },
         { name: 'Publication Ethics', path: '/publication-ethics' },

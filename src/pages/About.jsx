@@ -1,10 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useJournal } from '../context/JournalContext';
+import { useLocation } from 'react-router-dom';
 import { BookOpen, History, Target, ShieldCheck, Clock, Award, Building, Compass } from 'lucide-react';
 
 export const About = () => {
   const { settings, pageContents } = useJournal();
+  const { hash } = useLocation();
   const [activeTab, setActiveTab] = useState('about');
+
+  // Sync active tab with hash from URL
+  useEffect(() => {
+    const id = hash.replace('#', '');
+    const validTabs = ['about', 'aims', 'scope', 'history', 'frequency', 'open-access', 'publisher'];
+    if (validTabs.includes(id)) setActiveTab(id);
+  }, [hash]);
 
   const historyContent = pageContents.find(p => p.page_key === 'about' && p.section_key === 'history')?.content || `The **International Journal of Commerce, Arts, Science and Technology (IJCAST)** was originally established to provide a dedicated academic forum bridging foundational humanities with rapid technological advancements. 
 
@@ -56,9 +65,9 @@ Following a strategic editorial revitalization in 2026, IJCAST was relaunched as
       </div>
 
       {/* Tab Content Display */}
-      <div className="bg-white p-8 sm:p-10 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+      <div id="tab-content" className="bg-white p-8 sm:p-10 rounded-2xl border border-slate-200 shadow-sm space-y-6">
         {activeTab === 'about' && (
-          <div className="space-y-4">
+          <div id="about" className="space-y-4">
             <h2 className="text-2xl font-bold font-serif text-slate-900 border-b border-slate-100 pb-3">About IJCAST</h2>
             <p className="text-sm text-slate-700 leading-relaxed">
               The <strong>International Journal of Commerce, Arts, Science and Technology (IJCAST)</strong> is a peer-reviewed multidisciplinary academic journal. IJCAST provides an open-access platform for academics, scientists, research scholars, and industry professionals to publish innovative theoretical models and empirical research findings.

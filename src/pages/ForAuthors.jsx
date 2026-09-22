@@ -41,8 +41,7 @@ export const ForAuthors = () => {
       </div>
 
       {/* Author Guidelines Section */}
-      <section id="guidelines" className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6">
-        <div className="border-b border-slate-100 pb-3">
+      <section id="guidelines" className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6">        <div className="border-b border-slate-100 pb-3">
           <span className="text-xs uppercase font-bold text-amber-700 tracking-wider">Preparation Standard</span>
           <h2 className="text-2xl font-bold font-serif text-slate-900">Author Formatting Guidelines</h2>
         </div>
@@ -136,8 +135,8 @@ export const ForAuthors = () => {
       </section>
 
       {/* 8-Step Submission Workflow Visualization */}
-      <section id="workflow" className="space-y-6">
-        <div className="border-b border-slate-200 pb-3">
+      <section id="submission" className="space-y-6">
+        <div id="workflow" className="border-b border-slate-200 pb-3">
           <span className="text-xs uppercase font-bold text-amber-700 tracking-wider">Operational Model</span>
           <h2 className="text-2xl font-bold font-serif text-slate-900">8-Step Editorial Submission Workflow</h2>
         </div>

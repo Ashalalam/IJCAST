@@ -10,7 +10,8 @@ import {
   initialPageContent,
   initialMedia,
   initialTheses,
-  initialAnnouncements
+  initialAnnouncements,
+  initialConferences
 } from '../lib/mockData';
 
 const JournalContext = createContext(null);
@@ -55,6 +56,7 @@ export const JournalProvider = ({ children }) => {
   const [adminSession, setAdminSession] = useState(() => getLocalStore(STORAGE_KEYS.ADMIN_SESSION, null));
   const [theses, setTheses] = useState(() => getLocalStore(STORAGE_KEYS.THESES, []));
   const [announcements, setAnnouncements] = useState(() => getLocalStore(STORAGE_KEYS.ANNOUNCEMENTS, initialAnnouncements));
+  const [conferences, setConferences] = useState(() => getLocalStore(STORAGE_KEYS.CONFERENCES, initialConferences));
   const [isLoading, setIsLoading] = useState(true);
 
   // Global Modal States
@@ -67,6 +69,7 @@ export const JournalProvider = ({ children }) => {
   useEffect(() => { setLocalStore(STORAGE_KEYS.ADMIN_SESSION, adminSession); }, [adminSession]);
   useEffect(() => { setLocalStore(STORAGE_KEYS.RESEARCH_AREAS, researchAreas); }, [researchAreas]);
   useEffect(() => { setLocalStore(STORAGE_KEYS.ANNOUNCEMENTS, announcements); }, [announcements]);
+  useEffect(() => { setLocalStore(STORAGE_KEYS.CONFERENCES, conferences); }, [conferences]);
 
   // Load from Supabase if configured
   useEffect(() => {
@@ -104,7 +107,8 @@ export const JournalProvider = ({ children }) => {
           { data: pgs },
           { data: med },
           { data: ths },
-          { data: anns }
+          { data: anns },
+          { data: confs }
         ] = await Promise.all([
           supabase.from('journal_settings').select('*').maybeSingle(),
           supabase.from('volumes').select('*').order('year', { ascending: false }),
@@ -115,7 +119,8 @@ export const JournalProvider = ({ children }) => {
           supabase.from('page_content').select('*'),
           supabase.from('media').select('*').order('uploaded_at', { ascending: false }),
           supabase.from('theses').select('*').order('created_at', { ascending: false }),
-          supabase.from('announcements').select('*').order('created_at', { ascending: false })
+          supabase.from('announcements').select('*').order('created_at', { ascending: false }),
+          supabase.from('conferences').select('*').order('conference_date', { ascending: false })
         ]);
 
         // Settings
@@ -185,6 +190,10 @@ export const JournalProvider = ({ children }) => {
         // Announcements
         if (anns && anns.length > 0) setAnnouncements(anns);
         else setAnnouncements(initialAnnouncements);
+
+        // Conferences
+        if (confs && confs.length > 0) setConferences(confs.map(c => ({ ...c, research_areas: parseJsonField(c.research_areas), paper_titles: parseJsonField(c.paper_titles) })));
+        else setConferences(initialConferences);
 
       } catch (err) {
         console.warn('Supabase fetch error, maintaining local state:', err);
@@ -625,6 +634,40 @@ export const JournalProvider = ({ children }) => {
     }
   };
 
+  // Conferences CRUD
+  const saveConference = async (data) => {
+    const normalized = {
+      ...data,
+      research_areas: Array.isArray(data.research_areas) ? data.research_areas : (data.research_areas || '').split(',').map(s => s.trim()).filter(Boolean),
+      paper_titles: Array.isArray(data.paper_titles) ? data.paper_titles : (data.paper_titles || '').split('\n').map(s => s.trim()).filter(Boolean),
+    };
+    const isNew = !normalized.id || normalized.id.startsWith('conf-');
+    if (isSupabaseConfigured && supabase) {
+      if (isNew) {
+        const { id: _, ...rest } = normalized;
+        const { data: inserted, error } = await supabase.from('conferences').insert({ ...rest, created_at: new Date().toISOString() }).select().single();
+        if (!error && inserted) {
+          setConferences(prev => [{ ...inserted, research_areas: parseJsonField(inserted.research_areas), paper_titles: parseJsonField(inserted.paper_titles) }, ...prev]);
+          return;
+        }
+      } else {
+        await supabase.from('conferences').update(normalized).eq('id', normalized.id);
+        setConferences(prev => prev.map(c => c.id === normalized.id ? { ...c, ...normalized } : c));
+        return;
+      }
+    }
+    if (isNew) {
+      setConferences(prev => [{ ...normalized, id: `conf-${Date.now()}`, created_at: new Date().toISOString() }, ...prev]);
+    } else {
+      setConferences(prev => prev.map(c => c.id === normalized.id ? { ...c, ...normalized } : c));
+    }
+  };
+
+  const deleteConference = async (id) => {
+    setConferences(prev => prev.filter(c => c.id !== id));
+    if (isSupabaseConfigured && supabase) await supabase.from('conferences').delete().eq('id', id);
+  };
+
   // Announcements CRUD
   const saveAnnouncement = async (data) => {
     const isNew = !data.id || data.id.startsWith('ann-');
@@ -704,7 +747,10 @@ export const JournalProvider = ({ children }) => {
     announcements,
     saveAnnouncement,
     deleteAnnouncement,
-    toggleAnnouncement
+    toggleAnnouncement,
+    conferences,
+    saveConference,
+    deleteConference
   };
 
   return (

@@ -30,6 +30,7 @@ import { AdminLogin } from './pages/admin/AdminLogin';
 import { AdminDashboard } from './pages/admin/AdminDashboard';
 import { NotFound } from './pages/NotFound';
 import { Theses } from './pages/Theses';
+import { Conferences } from './pages/Conferences';
 import { ScrollToTop } from './components/common/ScrollToTop';
 
 // Layout wrapper for Public pages
@@ -75,6 +76,7 @@ export default function App() {
           <Route path="/copyright" element={<PublicLayout><Copyright /></PublicLayout>} />
           <Route path="/privacy" element={<PublicLayout><Privacy /></PublicLayout>} />
           <Route path="/theses" element={<PublicLayout><Theses /></PublicLayout>} />
+          <Route path="/conferences" element={<PublicLayout><Conferences /></PublicLayout>} />
 
           {/* 404 catch-all */}
           <Route path="*" element={<NotFound />} />

@@ -15,7 +15,8 @@ import {
   Lock,
   X,
   GraduationCap,
-  Bell
+  Bell,
+  Trophy
 } from 'lucide-react';
 
 export const AdminSidebar = ({ activeTab, setActiveTab, sidebarOpen, setSidebarOpen }) => {
@@ -27,6 +28,7 @@ export const AdminSidebar = ({ activeTab, setActiveTab, sidebarOpen, setSidebarO
     { id: 'issues', label: 'Issue / Number Management', icon: BookMarked },
     { id: 'articles', label: 'Article Management', icon: FileText },
     { id: 'theses', label: 'Thesis Repository', icon: GraduationCap },
+    { id: 'conferences', label: 'Conferences', icon: Trophy },
     { id: 'announcements', label: 'Announcements', icon: Bell },
     { id: 'editorial', label: 'Editorial Board', icon: Users },
     { id: 'research-areas', label: 'Research Areas', icon: Compass },

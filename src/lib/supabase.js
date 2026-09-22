@@ -20,7 +20,8 @@ const STORAGE_KEYS = {
   MEDIA: 'ijcast_media_v2',
   ADMIN_SESSION: 'ijcast_admin_session',
   THESES: 'ijcast_theses_v2',
-  ANNOUNCEMENTS: 'ijcast_announcements'
+  ANNOUNCEMENTS: 'ijcast_announcements',
+  CONFERENCES: 'ijcast_conferences'
 };
 
 // Helper for LocalStorage Persistence

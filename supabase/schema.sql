@@ -196,3 +196,25 @@ CREATE POLICY "Public Read Announcements" ON announcements FOR SELECT USING (tru
 
 -- Anon key can do all operations (app-level auth)
 CREATE POLICY "Allow All Announcements" ON announcements FOR ALL USING (true) WITH CHECK (true);
+
+-- 11. CONFERENCES TABLE
+CREATE TABLE IF NOT EXISTS conferences (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  conference_name TEXT NOT NULL,
+  organizer TEXT NOT NULL,
+  conference_date DATE,
+  end_date DATE,
+  venue TEXT,
+  research_areas JSONB DEFAULT '[]'::jsonb,   -- Array of theme strings
+  num_papers INT DEFAULT 0,
+  paper_titles JSONB DEFAULT '[]'::jsonb,     -- Array of paper title strings
+  proceedings_pdf_url TEXT,
+  report_pdf_url TEXT,
+  website_url TEXT,
+  is_published BOOLEAN DEFAULT true,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+ALTER TABLE conferences ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Public Read Conferences" ON conferences FOR SELECT USING (true);
+CREATE POLICY "Allow All Conferences" ON conferences FOR ALL USING (true) WITH CHECK (true);

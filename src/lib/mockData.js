@@ -913,3 +913,8 @@ export const initialAnnouncements = [
     created_at: new Date().toISOString()
   }
 ];
+
+// ========================================================
+// CONFERENCES DATA
+// ========================================================
+export const initialConferences = [];

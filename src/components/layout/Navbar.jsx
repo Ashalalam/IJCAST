@@ -35,13 +35,14 @@ export const Navbar = () => {
         { name: 'Manuscript Submission', path: '/for-authors#submission' },
         { name: 'Submission Process Workflow', path: '/for-authors#workflow' },
         { name: 'Publication Charges (APC)', path: '/apc' },
+        { name: 'Publication Ethics', path: '/publication-ethics' },
       ]
     },
     { name: 'Current Issue', path: '/current-issue' },
     { name: 'Archives', path: '/archives' },
     { name: 'Theses', path: '/theses' },
+    { name: 'Conferences', path: '/conferences' },
     { name: 'Research Areas', path: '/research-areas' },
-    { name: 'Publication Ethics', path: '/publication-ethics' },
     { name: 'Indexing', path: '/indexing' },
     { name: 'Contact', path: '/contact' },
   ];

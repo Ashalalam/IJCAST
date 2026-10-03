@@ -1,7 +1,10 @@
-import React from 'react';
-import { DollarSign, CheckCircle2, AlertCircle, Users, ExternalLink } from 'lucide-react';
+import React, { useState } from 'react';
+import { DollarSign, CheckCircle2, AlertCircle, Users, ExternalLink, CreditCard } from 'lucide-react';
+import { APCPaymentForm } from '../components/common/APCPaymentForm';
 
 export const APC = () => {
+  const [showPaymentForm, setShowPaymentForm] = useState(false);
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-8 py-12 space-y-10">
 
@@ -147,6 +150,73 @@ export const APC = () => {
           <p className="text-sm text-slate-700 leading-relaxed">
             There is absolutely <strong className="text-amber-700">no fee</strong> for manuscript submission, editorial screening, or peer review. APC is payable <strong>only after official acceptance</strong> of the manuscript for publication.
           </p>
+        </div>
+      </div>
+
+      {/* APC Payment Section */}
+      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        <div className="bg-gradient-to-r from-emerald-600 to-emerald-700 px-6 py-6">
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-white/20 rounded-xl">
+              <CreditCard className="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <h2 className="text-xl font-bold text-white">APC Payment Portal</h2>
+              <p className="text-emerald-100 text-sm">Secure payment processing for accepted manuscripts</p>
+            </div>
+          </div>
+        </div>
+        
+        <div className="p-6">
+          {!showPaymentForm ? (
+            <div className="text-center space-y-4">
+              <div className="max-w-2xl mx-auto space-y-3">
+                <p className="text-slate-600">
+                  If your manuscript has been <strong>officially accepted</strong> for publication, 
+                  you can proceed with the APC payment using our secure payment gateway.
+                </p>
+                <div className="flex items-center justify-center gap-2 text-sm text-slate-500">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                  <span>Secure payment processing with Cashfree</span>
+                </div>
+                <div className="flex items-center justify-center gap-2 text-sm text-slate-500">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                  <span>Support for UPI, Cards, and Net Banking</span>
+                </div>
+                <div className="flex items-center justify-center gap-2 text-sm text-slate-500">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                  <span>Automatic membership discount validation</span>
+                </div>
+              </div>
+              
+              <button
+                onClick={() => setShowPaymentForm(true)}
+                className="inline-flex items-center gap-2 px-8 py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl transition-colors shadow-lg hover:shadow-xl"
+              >
+                <CreditCard className="w-5 h-5" />
+                Proceed to Payment
+              </button>
+              
+              <p className="text-xs text-slate-500 max-w-lg mx-auto">
+                By proceeding, you confirm that your manuscript has been officially accepted 
+                for publication and you have received an acceptance notification from the editorial team.
+              </p>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-bold text-slate-900">APC Payment Form</h3>
+                <button
+                  onClick={() => setShowPaymentForm(false)}
+                  className="text-slate-500 hover:text-slate-700 text-sm"
+                >
+                  « Back to Information
+                </button>
+              </div>
+              
+              <APCPaymentForm />
+            </div>
+          )}
         </div>
       </div>
 

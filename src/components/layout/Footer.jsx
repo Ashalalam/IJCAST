@@ -47,6 +47,8 @@ export const Footer = () => {
             <li><Link to="/indexing" className="hover:text-amber-400 transition-colors">Indexing & Abstracting</Link></li>
             <li><Link to="/copyright" className="hover:text-amber-400 transition-colors">Copyright & Licensing</Link></li>
             <li><Link to="/privacy" className="hover:text-amber-400 transition-colors">Privacy Policy</Link></li>
+            <li><Link to="/terms" className="hover:text-amber-400 transition-colors">Terms & Conditions</Link></li>
+            <li><Link to="/refunds" className="hover:text-amber-400 transition-colors">Refunds & Cancellations</Link></li>
             <li><Link to="/contact" className="hover:text-amber-400 transition-colors">Contact Editorial Office</Link></li>
           </ul>
         </div>
@@ -78,8 +80,10 @@ export const Footer = () => {
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-slate-500">
           <p>© {new Date().getFullYear()} {settings.short_name || 'IJCAST'}. All rights reserved.</p>
           <div className="flex items-center space-x-4">
-            <Link to="/privacy" className="hover:text-slate-300">Privacy</Link>
-            <Link to="/copyright" className="hover:text-slate-300">Terms & Licensing</Link>
+            <Link to="/terms" className="hover:text-slate-300">Terms & Conditions</Link>
+            <Link to="/privacy" className="hover:text-slate-300">Privacy Policy</Link>
+            <Link to="/refunds" className="hover:text-slate-300">Refunds & Cancellations</Link>
+            <Link to="/contact" className="hover:text-slate-300">Contact Us</Link>
             <Link
               to="/admin/login"
               className="flex items-center space-x-1 px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white rounded border border-slate-700 transition-colors"

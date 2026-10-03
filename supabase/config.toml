@@ -1,0 +1,38 @@
+# A string used to distinguish different Supabase projects on the same host.
+project_id = "ijcast"
+
+[api]
+enabled = true
+port = 54321
+
+[db]
+port = 54322
+major_version = 15
+
+[studio]
+enabled = true
+port = 54323
+
+[auth]
+enabled = true
+site_url = "http://127.0.0.1:3000"
+enable_signup = true
+
+[auth.email]
+enable_signup = true
+
+# Edge Functions Configuration - Allow webhooks without JWT
+[functions.cashfree-webhook]
+verify_jwt = false
+
+[functions.create-cashfree-order] 
+verify_jwt = false
+
+[functions.verify-payment]
+verify_jwt = false
+
+[functions.test-cashfree-auth]
+verify_jwt = false
+
+[analytics]
+enabled = false

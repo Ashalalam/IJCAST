@@ -25,6 +25,10 @@ import { Contact } from './pages/Contact';
 import { APC } from './pages/APC';
 import { Copyright } from './pages/Copyright';
 import { Privacy } from './pages/Privacy';
+import { Terms } from './pages/Terms';
+import { Refunds } from './pages/Refunds';
+import { PaymentSuccess } from './pages/PaymentSuccess';
+import { PaymentFailed } from './pages/PaymentFailed';
 
 import { AdminLogin } from './pages/admin/AdminLogin';
 import { AdminDashboard } from './pages/admin/AdminDashboard';
@@ -75,8 +79,16 @@ export default function App() {
           <Route path="/apc" element={<PublicLayout><APC /></PublicLayout>} />
           <Route path="/copyright" element={<PublicLayout><Copyright /></PublicLayout>} />
           <Route path="/privacy" element={<PublicLayout><Privacy /></PublicLayout>} />
+          <Route path="/terms" element={<PublicLayout><Terms /></PublicLayout>} />
+          <Route path="/refunds" element={<PublicLayout><Refunds /></PublicLayout>} />
           <Route path="/theses" element={<PublicLayout><Theses /></PublicLayout>} />
           <Route path="/conferences" element={<PublicLayout><Conferences /></PublicLayout>} />
+
+          {/* Payment Routes */}
+          <Route path="/payment/success" element={<PaymentSuccess />} />
+          <Route path="/payment/failed" element={<PaymentFailed />} />
+          <Route path="/payment/cancelled" element={<PaymentFailed />} />
+          <Route path="/payment/demo-success" element={<PaymentSuccess />} />
 
           {/* 404 catch-all */}
           <Route path="*" element={<NotFound />} />

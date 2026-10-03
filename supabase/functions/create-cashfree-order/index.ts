@@ -99,6 +99,18 @@ serve(async (req) => {
 
     // Server-side APC amount calculation (NEVER trust frontend)
     const calculateAPC = (authorType: string, isMember: boolean = false) => {
+      // FOR TESTING: Use ₹1 for all payments
+      // TODO: Remove this and uncomment actual rates for production
+      return {
+        amount: 1,
+        currency: 'INR',
+        originalAmount: 1,
+        discountPercent: 0,
+        discountAmount: 0,
+        isMember
+      };
+      
+      /* ACTUAL PRODUCTION RATES - Uncomment when ready for real payments
       const rates = {
         indian: {
           nonMember: 2000,
@@ -127,6 +139,7 @@ serve(async (req) => {
         discountAmount: rate.nonMember - amount,
         isMember
       }
+      */
     }
 
     // Validate GASF membership (placeholder - implement actual validation)

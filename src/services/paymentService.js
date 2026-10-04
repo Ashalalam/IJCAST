@@ -7,18 +7,6 @@ const EDGE_FUNCTIONS_URL = `${SUPABASE_URL}/functions/v1`;
 export class PaymentService {
   // Calculate APC amount based on author type and membership
   static calculateAPC(authorType, isMember = false) {
-    // FOR TESTING: Always return ₹1
-    // TODO: Remove this and uncomment actual rates for production
-    return {
-      amount: 1,
-      currency: 'INR',
-      originalAmount: 1,
-      discountPercent: 0,
-      discountAmount: 0,
-      isMember
-    };
-    
-    /* ACTUAL PRODUCTION RATES - Uncomment when ready
     const rates = {
       indian: {
         nonMember: 2000,
@@ -48,7 +36,6 @@ export class PaymentService {
       discountAmount: rate.nonMember - amount,
       isMember
     };
-    */
   }
 
   // Create payment order using Supabase Edge Function

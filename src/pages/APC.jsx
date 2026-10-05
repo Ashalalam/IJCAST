@@ -131,7 +131,7 @@ export const APC = () => {
             Authors interested in becoming a Student Member or Professional Member of GASF may apply for membership through the link below.
           </p>
           <a
-            href="https://gyanaksharfoundation.org"
+            href="https://www.gyanaksharfoundation.org/membership/apply"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1.5 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl transition-colors"
